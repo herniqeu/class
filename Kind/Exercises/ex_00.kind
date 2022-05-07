@@ -8,22 +8,29 @@ type Bool {
 // Negation
 // Returns the opposite of a Bool
 neg(b: Bool): Bool 
-
-  ?n
+ case b {
+     true: false
+ } default true
 
 // And
 // Returns true if both inputs are true
 and(a: Bool, b: Bool): Bool
-
-  ?a
+ case a {
+  true true : true
+ } default false
 
 // Or
 // Returs true if any input is true
 or(a: Bool, b: Bool): Bool
-
-  ?o
+ case a {
+     false false : false
+ } default true
 
 // Equal
 // Returs true if both inputs are identical
 eql(a: Bool, b: Bool): Bool
-  ?e
+ case a b {
+      true true : true
+      false false: true
+  } default false
+  
