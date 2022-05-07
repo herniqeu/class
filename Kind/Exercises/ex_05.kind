@@ -14,30 +14,33 @@ type Maybe <A: Type> {
 // Ex: zip!!([1,2], ["a","b","c"]) == [{1, "a"}, {2 , "b"}]
 // Ex: zip!!(["a", "b"], [3, 5])   == [{"a", 3}, {2 , "b"}]
 zip<A: Type, B: Type>(xs: List<A>, ys: List<B>): List<Pair<A,B>>
-  ?a
+  case xs ys {
+      nil nil : []
+      nil cons :  []
+      cons nil : []
+      cons cons: List.cons!(Pair.new!!(xs.head, ys.head), zip!!(xs.tail, ys.tail))
+  }
 
 // Returns the smallest element of a List
 smallest(xs: List<Nat>): Nat
-  ?s
+ case xs {
+   nil: 0
+   cons: case xs.tail {
+     nil: xs.head
+     cons: case Nat.ltn(xs.head,xs.tail.head) { // caso xs.tail.head seja maior q xs.head [x0,x1,x2,...,xn] x1>x0
+       true: smallest(List.cons!(xs.head, xs.tail.tail)) // como x1>x0 ele ta fora da jogada
+       false: smallest(xs.tail) // aq ele ta dentro da jogada 
+     }
+   }
+ }
+
 
 // Returns the same list without the smallest element
 delete_smallest(xs: List<Nat>): List<Nat>
-  ?d
-
-// Returns the same list, in ascending order
-sort_ascending(xs: List<Nat>): List<Nat>
-  ?a
-
-// Returns an element at an index from the list
-// if there is an element at that index
-//   returns Maybe.some!(element)
-// else
-//   returns Maybe.none!
-get<A: Type>(idx: Nat, xs: List<A>): Maybe<A>
-  ?g
-
-// Removes all elements that does not match a condition
-// List.filter<Nat>(Nat.odd, [1, 2, 3, 4, 5]) = [1, 3, 5]
-filter<A: Type>(f: A -> Bool, xs: List<A>): List<A>
-  ?f
-  
+  case xs {
+    nil: []
+    cons: case Nat.eql(xs.head, smallest(xs)) { // o ponto de tirar da lista é ~ transformar ele em head e xs.tail
+      true: xs.tail
+      false: List.cons!(xs.head,delete_smallest(xs.tail))
+    }
+  }
