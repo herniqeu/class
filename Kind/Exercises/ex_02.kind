@@ -7,44 +7,70 @@ type Nat {
 
 // Doubles a number
 dbl(a: Nat): Nat // double
-
-  ?b
+ case a {
+     zero: 0
+     succ: Nat.succ(Nat.succ(dbl(a.pred)))
+ }
 
 // Addition
 add(a: Nat, b: Nat): Nat
-
+ case a {
+     zero: b 
+     succ: Nat.succ(add(a.pred,b.pred))
+ }
   ?a
 
 // Multiplication
 mul(a: Nat, b: Nat): Nat
-  
-  ?m
+ case a { 
+     zero: 0
+     succ: Nat.add(mul(a.pred,b),b)
+ }
 
 // Subtraction
 // 4 - 5 = 0
 // 5 - 4 = 1
 sub(a: Nat, b: Nat): Nat
-
-  ?s
+ case a b {
+     succ zero: a 
+     succ succ : sub(a.pred, b.pred)  
+}
 
 // Factorial
 // 4! = 24
 fac(a: Nat): Nat 
-  
-  ?f
+  case a {
+      zero: 1
+      succ: Nat.mul(a,a.pred)
+  }
 
 // Division
 // 1 / 2 = 0
 // x / 0 = 0
 // 5 / 2 = 2
 div(a: Nat, b: Nat): Nat // division
-  
-  ?d
+  case a  {
+      zero: 0
+      succ: Nat.succ(div(Nat.sub(a,b),b))
 
 // Equal
-eql(a: Nat, b: Nat): Bool // Given 2 numbers, it returns true if the 2 are the same and false if they are different.
-  
-  ?e 
+eql(a: Nat, b: Nat)
+ case a {
+     zero: case b {
+         zero: true
+         succ : false
+     }
+     succ: case b {
+         zero: false
+         succ: case Nat.sub(a,b){
+             zero: case Nat.sub(b,a){
+                 zero: true
+                 succ: false
+             }
+             succ: false
+         }
+     }
+ }
 
 // Do not use the "not" function to create the functions below
 
@@ -52,13 +78,22 @@ eql(a: Nat, b: Nat): Bool // Given 2 numbers, it returns true if the 2 are the s
 // 2 > 1 = True
 // 3 > 3 = False
 gtn(a: Nat, b: Nat): Bool // if A > B == True else false
-  
-  ?g
+  case a {
+      zero: false
+      succ: case Nat.sub(a,b){
+          zero: false
+          succ: true
+      }
+  }
 
 // Lower than
 // 1 < 2 = True
 // 3 < 3 = False
 ltn(a: Nat, b: Nat): Bool // if A > B == False else true 
-  
-  ?l
-
+  case b {
+      zero: false
+      succ: case Nat.sub(b,a){
+          zero: false
+          succ: true
+      } 
+  }
