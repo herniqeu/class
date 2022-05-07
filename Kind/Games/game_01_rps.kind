@@ -6,43 +6,72 @@ type Object {
 }
 
 // Converts a text to an Object. If not possible, returns rock
-Object.read(code: String): Object
-  ?a
 
-// Converts a number to an Object. If not possible, returns rock
+Object.read(code: String): Object
+  case code {
+    nil: Object.rock
+    cons: case String.eql(code,"paper") {
+      true: Object.paper
+      false: case String.eql(code,"scissors") {
+        true: Object.scissors
+        false: Object.rock
+      }
+    }
+  }
+
+// Converts a number to an Object. If not possible, returns rock 
+// rock 0
+// scissors 1
+// paper 2
 Object.from_nat(n: Nat): Object
-  ?b
+  case n {
+    zero: Object.rock
+    succ: Nat.eql(n,1) {
+      true: Object.scissors
+      false: case Nat.eql(n,2) {
+        true: Object.paper
+        false: Object.rock
+      }
+    }
+  }
 
 // Checks if Object a beats Object b
 // Draw = false
 Object.wins(a: Object, b: Object): Bool
-  ?c
+  case a b {
+    paper rock : true
+    rock scissors : true
+    scissors paper : true
+  } default false
 
 // If wins return "You won", else "You lost"
 Object.match_result(win: Bool): String
-  ?d
+  case win {
+    true: "You won"
+    false: "You lost"
+  }
 
 Test: IO(Unit)
   IO {
-    IO.print("Pick one: rock, paper or scissors")
+    IO.print("turns around man")
     // Asks for user input and saves it in variable line
     get user_input = IO.get_line
 
     // Converts the user_input (String) to the Object type
-    let user_object = ?e
+    let user_object = Object.read(user_input)
 
     // Returns a random number below 3
     // 0, 1 or 2
     get random_num = IO.random(3)
 
     // Converts random_num (Nat) to the Object type
-    let cpu_object = ?f
+    let cpu_object = Object.ofnat(random_num)
 
     // Compares user_object and cpu_object and returns true if user wins
-    let user_won = ?g
+    let user_won = Object.wins(user_object, cpu_object)
 
     // Final message to be said: "You won" or "You lost"
-    let final_message = ?h
+    let final_message = Object.match_result(user_won)
 
     IO.print(final_message)
 
