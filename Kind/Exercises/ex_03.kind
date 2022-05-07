@@ -13,12 +13,18 @@ swap<A: Type, B: Type>(pair: Pair<A,B>): Pair<B,A>
 
 // Returns the first element of a pair
 first<A: Type, B: Type>(pair: Pair<A,B>): A
-  ?a
+  case pair {
+      new: pair.fst
+  }
 
 // Returns the second element of a pair
 second<A: Type, B: Type>(pair: Pair<A,B>): B
-  ?a
+ case pair {
+     new: pair.snd
+ }
 
 // Applies a function to both elements of a Pair
 map<A: Type, B: Type>(fn: A -> B, pair: Pair<A,A>): Pair<B,B>
-  ?a
+  case pair {
+      new: Pair.new!!(fn(pair.fst), fn(pair.snd))
+  }
