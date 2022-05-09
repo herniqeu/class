@@ -34,3 +34,26 @@ eql(a: Bool, b: Bool): Bool
       false false: true
   } default false
   
+// Xor
+// Returns true if both inputs are different
+xor(a: Bool, b: Bool): Bool
+ case a b {
+  true true : false
+  false false : false
+ } default true
+
+// Nor
+// Returns true if both inputs are false
+nor(a: Bool, b: Bool): Bool
+ case a b {
+   false false: true
+ } default false
+ 
+// Nand
+// Returns false only if both inputs are true
+nand(a: Bool, b: Bool): Bool
+ case a b {
+  true true : false
+ } default true
+  
+  //Me desculpe sipher por ser viciado em acucar sintetico
