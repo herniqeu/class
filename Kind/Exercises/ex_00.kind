@@ -56,4 +56,13 @@ nand(a: Bool, b: Bool): Bool
   true true : false
  } default true
   
-  //Me desculpe sipher por ser viciado em acucar sintetico
+// Xnor
+// Returns true if both inputs are identical
+xnor(a: Bool, b: Bool): Bool
+case a b {
+ true false: false
+ false true: false
+} default true
+
+
+//Me desculpe sipher por ser viciado em acucar sintetico
