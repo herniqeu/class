@@ -1,0 +1,35 @@
+// type MaybeBool
+// It maybe holds a Boolean inside it
+type MaybeBool { 
+  none 
+  some(value: Bool)
+ }
+
+// Returns true if Maybe is none
+is_none(a: MaybeBool): Bool
+  ?a
+    
+// Returns true if Maybe is some
+is_some(a: MaybeBool): Bool
+  ?b
+
+// Returns true if both inputs are identical
+// eql(MaybeBool.none,             MaybeBool.none            ) -> true
+// eql(MaybeBool.some(Bool.false), MaybeBool.some(Bool.false)) -> true
+eql(a: MaybeBool, b: MaybeBool): Bool
+  ?c
+
+// Returns the value inside the MaybeBool.
+// If there is no value contained, returns v instead
+default(a: MaybeBool, v: Bool): Bool
+  ?d
+
+// Create a MaybeBool from a Boolean
+// create(Bool.false) -> MaybeBool(Bool.false)
+create(a:Bool): MaybeBool
+  ?e
+
+// Returns the first input that is a MaybeBool.some
+// Returns MaybeBool.none if both are MaybeBool.none
+or(a: MaybeBool, b: MaybeBool) : MaybeBool 
+  ?f
