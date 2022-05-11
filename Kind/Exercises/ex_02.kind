@@ -1,35 +1,43 @@
-// type MaybeBool
-// It maybe holds a Boolean inside it
-type MaybeBool { 
-  none 
-  some(value: Bool)
- }
+// type PairBool
+// Contains 2 Booleans inside it
+type PairBool { 
+  new(fst: Bool, snd: Bool)
+}
 
-// Returns true if Maybe is none
-is_none(a: MaybeBool): Bool
+// Returns the first element of a pair
+fst(pair: PairBool): Bool
   ?a
-    
-// Returns true if Maybe is some
-is_some(a: MaybeBool): Bool
+
+// Returns the second element of a pair
+snd(pair: PairBool): Bool
   ?b
 
-// Returns true if both inputs are identical
-// eql(MaybeBool.none,             MaybeBool.none            ) -> true
-// eql(MaybeBool.some(Bool.false), MaybeBool.some(Bool.false)) -> true
-eql(a: MaybeBool, b: MaybeBool): Bool
+// Returns true if both elements of a PairBool are identical
+eql_elements(a: PairBool): Bool 
   ?c
-
-// Returns the value inside the MaybeBool.
-// If there is no value contained, returns v instead
-default(a: MaybeBool, v: Bool): Bool
-  ?d
-
-// Create a MaybeBool from a Boolean
-// create(Bool.false) -> MaybeBool(Bool.false)
-create(a:Bool): MaybeBool
-  ?e
-
-// Returns the first input that is a MaybeBool.some
-// Returns MaybeBool.none if both are MaybeBool.none
-or(a: MaybeBool, b: MaybeBool) : MaybeBool 
+  
+// Returns true if both Pairs are equal 
+// eql(PairBool.new(false, false), PairBool.new(true, true)) -> false 
+// eql(PairBool.new(true, false), PairBool.new(true, false)) -> true
+eql(a: PairBool, b: PairBool): Bool
   ?f
+
+// Returns true if both Pairs are different
+// eql(PairBool.new(false, false), PairBool.new(true, true)) -> true 
+// eql(PairBool.new(true, false), PairBool.new(true, false)) -> false
+xor(a: PairBool, b: PairBool): Bool
+  ?f
+  
+// Creates a PairBool from 2 Booleans
+create(a: Bool, b: Bool): PairBool
+  ?h
+
+// Inverts the values of a PairBool
+// neg(PairBool.new(false, false) -> PairBool.new(true, true)
+// neg(PairBool.new(false, true) -> PairBool.new(true, false)
+neg(pair: PairBool): PairBool
+  ?i
+
+// Inverts the 2 elements of a PairBool
+swap(pair: PairBool): PairBool 
+  ?k
