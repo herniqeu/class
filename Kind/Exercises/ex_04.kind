@@ -41,7 +41,7 @@ sub(a: Nat, b: Nat): Nat
 fac(a: Nat): Nat 
   case a {
       zero: 1
-      succ: Nat.mul(a,a.pred)
+      succ: Nat.mul(a,fac(a.pred))
   }
 
 // Division
