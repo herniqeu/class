@@ -22,6 +22,7 @@ is_some(a: MaybeBool): Bool
 // Returns true if both inputs are identical
 // eql(MaybeBool.none,             MaybeBool.none            ) -> true
 // eql(MaybeBool.some(Bool.false), MaybeBool.some(Bool.false)) -> true
+
 eql(a: MaybeBool, b: MaybeBool): Bool
   case a {
       none: case b {
@@ -41,6 +42,7 @@ eql(a: MaybeBool, b: MaybeBool): Bool
 
 // Returns the value inside the MaybeBool.
 // If there is no value contained, returns v instead
+
 default1(a: MaybeBool, v: Bool): Bool
   case a {
       some: a.value
