@@ -6,38 +6,76 @@ type PairBool {
 
 // Returns the first element of a pair
 fst(pair: PairBool): Bool
-  ?a
+  case pair {
+      new: pair.fst
+  }
 
 // Returns the second element of a pair
 snd(pair: PairBool): Bool
-  ?b
+  case pair {
+      new: pair.snd
+  }
 
 // Returns true if both elements of a PairBool are identical
 eql_elements(a: PairBool): Bool 
-  ?c
-  
+  case a {
+      new: case a.fst a.snd {
+          true true: true
+          false false: true
+      }default false 
+  } 
+
 // Returns true if both Pairs are equal 
 // eql(PairBool.new(false, false), PairBool.new(true, true)) -> false 
 // eql(PairBool.new(true, false), PairBool.new(true, false)) -> true
 eql(a: PairBool, b: PairBool): Bool
-  ?f
+  case a b {
+      new new: case a.fst b.fst{
+          true true: case a.snd b.snd {
+              true true: true
+              false false: true
+          }default false
+          false false case a.snd b.snd {
+              true true: true
+              false false: true
+              
+        }default false
+      }default false
+  }
 
 // Returns true if both Pairs are different
 // eql(PairBool.new(false, false), PairBool.new(true, true)) -> true 
 // eql(PairBool.new(true, false), PairBool.new(true, false)) -> false
 xor(a: PairBool, b: PairBool): Bool
-  ?f
+  case a b {
+      a a: false
+      b b: false
+  }default true
   
 // Creates a PairBool from 2 Booleans
 create(a: Bool, b: Bool): PairBool
-  ?h
+  case a b {
+      true true: PairBool.new(true, true)
+      false false: PairBool.new(false, false)
+      true false: PairBool.new(true, false)
+      false true: PairBool.new(false, true)
+  }
 
 // Inverts the values of a PairBool
 // neg(PairBool.new(false, false) -> PairBool.new(true, true)
 // neg(PairBool.new(false, true) -> PairBool.new(true, false)
 neg(pair: PairBool): PairBool
-  ?i
+  case pair {
+      new: case pair.fst pair.snd {
+          true true: PairBool.new(false, false)
+          false false: PairBool.new(true, true)
+          true false: PairBool.new(false, true)
+          false true: PairBool.new(true, false)
+      }
+  }
 
 // Inverts the 2 elements of a PairBool
 swap(pair: PairBool): PairBool 
-  ?k
+  case pair {
+      new: PairBool.new(pair.snd, pair.fst)
+  }
