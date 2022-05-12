@@ -16,7 +16,7 @@ dbl(a: Nat): Nat // double
 add(a: Nat, b: Nat): Nat
  case a {
      zero: b 
-     succ: Nat.succ(add(a.pred,b.pred))
+     succ: Nat.succ(add(a.pred,b))
  }
   ?a
 
