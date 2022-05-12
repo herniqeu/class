@@ -6,6 +6,7 @@ type Nat {
 }
 
 // Doubles a number
+
 dbl(a: Nat): Nat // double
  case a {
      zero: 0
@@ -13,14 +14,15 @@ dbl(a: Nat): Nat // double
  }
 
 // Addition
+
 add(a: Nat, b: Nat): Nat
  case a {
      zero: b 
      succ: Nat.succ(add(a.pred,b))
  }
-  ?a
 
 // Multiplication
+
 mul(a: Nat, b: Nat): Nat
  case a { 
      zero: 0
@@ -28,6 +30,7 @@ mul(a: Nat, b: Nat): Nat
  }
 
 // Subtraction
+
 // 4 - 5 = 0
 // 5 - 4 = 1
 sub(a: Nat, b: Nat): Nat
@@ -37,6 +40,7 @@ sub(a: Nat, b: Nat): Nat
 }
 
 // Factorial
+
 // 4! = 24
 fac(a: Nat): Nat 
   case a {
@@ -48,12 +52,14 @@ fac(a: Nat): Nat
 // 1 / 2 = 0
 // x / 0 = 0
 // 5 / 2 = 2
+
 div(a: Nat, b: Nat): Nat // division
   case a  {
       zero: 0
       succ: Nat.succ(div(Nat.sub(a,b),b))
 
 // Equal
+
 eql(a: Nat, b: Nat)
  case a {
      zero: case b {
@@ -77,6 +83,7 @@ eql(a: Nat, b: Nat)
 // Greater than
 // 2 > 1 = True
 // 3 > 3 = False
+
 gtn(a: Nat, b: Nat): Bool // if A > B == True else false
   case a {
       zero: false
@@ -89,6 +96,7 @@ gtn(a: Nat, b: Nat): Bool // if A > B == True else false
 // Lower than
 // 1 < 2 = True
 // 3 < 3 = False
+
 ltn(a: Nat, b: Nat): Bool // if A > B == False else true 
   case b {
       zero: false
