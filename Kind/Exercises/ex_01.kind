@@ -51,6 +51,7 @@ default1(a: MaybeBool, v: Bool): Bool
 
 // Create a MaybeBool from a Boolean
 // create(Bool.false) -> MaybeBool(Bool.false)
+
 create(a:Bool): MaybeBool
   case a {
       true: MaybeBool.some(Bool.true)
@@ -59,6 +60,7 @@ create(a:Bool): MaybeBool
 
 // Returns the first input that is a MaybeBool.some
 // Returns MaybeBool.none if both are MaybeBool.none
+
 or(a: MaybeBool, b: MaybeBool): MaybeBool
  case a b {
      none none: MaybeBool.none
