@@ -44,3 +44,20 @@ delete_smallest(xs: List<Nat>): List<Nat>
       false: List.cons!(xs.head,delete_smallest(xs.tail))
     }
   }
+  
+  // Returns the same list, in ascending order
+sort_ascending(xs: List<Nat>): List<Nat>
+  ?a
+
+// Returns an element at an index from the list
+// if there is an element at that index
+//   returns Maybe.some!(element)
+// else
+//   returns Maybe.none!
+get<A: Type>(idx: Nat, xs: List<A>): Maybe<A>
+  ?g
+
+// Removes all elements that does not match a condition
+// List.filter<Nat>(Nat.odd, [1, 2, 3, 4, 5]) = [1, 3, 5]
+filter<A: Type>(f: A -> Bool, xs: List<A>): List<A>
+  ?f
