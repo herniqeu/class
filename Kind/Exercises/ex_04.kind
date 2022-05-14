@@ -124,3 +124,58 @@ min(a: Nat, b: Nat): Nat
          }
      }
  }
+ 
+min(a: Nat, b: Nat): Nat
+ case a b {
+     succ succ: Nat.succ(min(a.pred,b.pred))
+ } default Nat.zero
+
+
+// Maximum
+// max(2, 3) = 3
+// max(4, 1) = 4
+
+max(a: Nat, b: Nat): Nat
+ case a {
+     zero: case b {
+         zero: Nat.zero
+         succ: b
+     }
+     succ: case b {
+         zero: a
+         succ: case Nat.sub(a,b){
+             zero: case Nat.sub(b,a){
+                 zero: a // a = b
+                 succ: b
+             }
+             succ: a
+         }
+     }
+ }
+ //solucao alternativa por recursao
+ max(a: Nat, b: Nat): Nat  
+ case a b{
+     zero zero: Nat.zero
+     zero succ: b
+     succ zero: a
+     succ succ : Nat.succ(max(a.pred,b.pred))
+ }
+
+// Divides a number by two
+hlf(a: Nat): Nat
+ case a {
+     zero: Nat.zero
+     succ: Nat.succ(hlf(Nat.sub(a,2)))
+ }
+ 
+ // Division
+// 1 / 2 = 0
+// x / 0 = 0
+// 5 / 2 = 2
+ division(a: Nat, b: Nat): Nat
+ case a {
+     zero: Nat.zero
+     succ: Nat.succ(division(Nat.sub(a,b),b))
+ }
+
+
