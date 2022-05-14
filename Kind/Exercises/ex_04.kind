@@ -33,6 +33,14 @@ fac(a: Nat): Nat
   
   ?f
 
+// Division
+// 1 / 2 = 0
+// x / 0 = 0
+// 5 / 2 = 2
+div(a: Nat, b: Nat): Nat // division
+  
+  ?d
+
 // Equal
 eql(a: Nat, b: Nat): Bool // Given 2 numbers, it returns true if the 2 are the same and false if they are different.
   
@@ -67,16 +75,3 @@ min(a: Nat, b: Nat): Nat // if A < B then A else B
 max(a: Nat, b: Nat): Nat // if A > B then A else B
   
   ?m3
-
-
-// Divides a number by two
-hlf(a: Nat): Nat
-  ?h
-
-// Division
-// 1 / 2 = 0
-// x / 0 = 0
-// 5 / 2 = 2
-div(a: Nat, b: Nat): Nat // division
-  
-  ?d
