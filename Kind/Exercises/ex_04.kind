@@ -105,3 +105,22 @@ ltn(a: Nat, b: Nat): Bool // if A > B == False else true
           succ: true
       } 
   }
+
+// Minimum
+// min(2, 3) = 2
+// min(4, 1) = 1
+
+min(a: Nat, b: Nat): Nat
+ case a {
+     zero: Nat.zero
+     succ: case b {
+         zero: Nat.zero
+         succ: case Nat.sub(a,b) {
+             zero: case Nat.sub(b,a) {
+                 zero: b // a faz mesmo efeito q a, pois a = b
+                 succ: a
+             }
+             succ: b 
+         }
+     }
+ }
