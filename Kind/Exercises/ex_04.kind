@@ -109,6 +109,27 @@ ltn(a: Nat, b: Nat): Bool // if A > B == False else true
 // Minimum
 // min(2, 3) = 2
 // min(4, 1) = 1
+// pq os exemplos retornam Nat e na lista tá Bool? nos exemplos max e min, enfim vou fazer com os dois casos
+
+//primeiro é min falso ou verdadeiro
+
+min(a: Nat, b: Nat): Bool
+ case a {
+     zero: case b {
+         zero: Bool.false
+         succ: Bool.true
+     }
+     succ: case b {
+         zero: Bool.false
+         succ: case Nat.sub(a,b){
+             zero: case Nat.sub(b,a) {
+                 zero: false 
+                 succ: true
+             }
+             succ: false
+         }
+     }
+ }
 
 min(a: Nat, b: Nat): Nat
  case a {
@@ -124,7 +145,7 @@ min(a: Nat, b: Nat): Nat
          }
      }
  }
- 
+//solucao alternativa por recursao
 min(a: Nat, b: Nat): Nat
  case a b {
      succ succ: Nat.succ(min(a.pred,b.pred))
@@ -134,6 +155,18 @@ min(a: Nat, b: Nat): Nat
 // Maximum
 // max(2, 3) = 3
 // max(4, 1) = 4
+// primeiro é max true ou falso
+max(a: Nat, b: Nat): Bool
+ case a {
+     zero: Bool.false
+     succ: case b {
+         zero: Bool.true
+         succ: case Nat.sub(a,b) {
+             zero: Bool.false
+             succ: Bool.true
+         }
+     }
+}
 
 max(a: Nat, b: Nat): Nat
  case a {
