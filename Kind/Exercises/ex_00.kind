@@ -15,14 +15,14 @@ neg(b: Bool): Bool
 // And
 // Returns true if both inputs are true
 and(a: Bool, b: Bool): Bool
- case a {
+ case a b{
   true true : true
  } default false
 
 // Or
 // Returs true if any input is true
 or(a: Bool, b: Bool): Bool
- case a {
+ case a b{
      false false : false
  } default true
 
@@ -65,4 +65,3 @@ case a b {
 } default true
 
 
-//Me desculpe sipher por ser viciado em acucar sintetico
