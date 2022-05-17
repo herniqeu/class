@@ -1,0 +1,68 @@
+// Consider the following definition for lists:
+//
+// Nil:         A empty list
+// (Cons x xs): A list with 'x' as first element and 'xs' as a list of the following elements
+//
+// Ex.: the list [1,2,3] would be (Cons 1 (Cons 2 (Cons 3 Nil)))
+//
+// With that definition in mind, do the following exercises:
+
+// P.S.: I hope you didn't forget that you have to
+// write a version of your funtion for each specific case it has =.=
+//
+// (Func Nil)          -> Will run for the empty list
+// (Func (Cons x Nil)) -> Will run for a singleton list
+// (Func (Cons x xs))  -> Will run for any non-empty list
+// (Func x)            -> Will run for any list
+
+// For the following 4 functions, since they require the list to have at least one element,
+// you can have them return Error.EmptyList when the input is a empty list, like this:
+(Func Nil) = Error.EmptyList
+
+// Returns the first element of a list
+// (Head xs)
+(Head Nil) = Nil
+(Head (Cons x _ )) = x // x _ -> resto da lista
+
+// Returns the list without its first element
+// (Tail xs)
+(Tail Nil) = Nil
+(Tail (Cons _ xs)) = xs 
+
+// Returns the last element of a list
+// (Last xs)
+(Last Nil) = Nil
+(Last (Cons x Nil)) = x
+(Last (Cons x xs)) = (Last xs) // até chegar caso x Nil
+
+// Returns the list without its first element
+// (Init xs)
+(Init Nil) = Nil
+(Init (Cons x Nil)) = (Nil)
+(Init (Cons x xs)) = xs
+
+// Returns the length of the list
+// (Len xs)
+(Len Nil) = 0
+(Len (Cons x xs)) = (S ( Len xs))
+
+// Returns the concatenation of two lists
+// (Concat xs ys)
+(Concat xs Nil) = xs
+(Concat xs Cons(y ys)) = (Cons y (Concat xs ys)) 
+
+
+// Returns the reversion of a list
+// (Reverse xs)
+
+//* ADVANCED SECTION
+
+// Map a function to all elements of the list
+// Ex.: (Map Not [True, False, True]) -> [False, True, False]
+// (Map fn xs)
+(Map _ Nil) = Nil
+(Map fn (Cons x xs)) = Cons (fn x) (Map fn xs))
+
+// Returns the list only with the elements that satisfy a condition
+// Ex.: (Filter Not [True, False, True]) -> [False]
+// (Filter fn xs)
