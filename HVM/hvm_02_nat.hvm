@@ -17,36 +17,73 @@
 
 // Retorna o antecessor do número
 // (Pred x)
+(Pred Z) = Z 
+(Pred (S x)) =  x
 
 // Retorna o dobro do número
 // (Dobro x)
+(Dobro Z) = Z
+(Dobro (S x)) = (S (S (Dobro x ))) 
 
 // Retorna metade (arredondado pra baixo) do número
 // (Metade x)
+(Metade Z) = Z
+(Metade (S Z)) = Z // 1 vira zero 
+(Metade (S (S x))) = (S (Metade x))
 
 // Retorna a adição de dois números
 // (Add x y)
+(Add x Z) = x
+(Add Z y) = y
+(Add x (S y)) = ( S (Add x y)) // x + y + 1 = (x+y)+1 vai acumulando 1 até y=0 
 
 // Retorna a subtração de dois números (0 se seria negativo)
 // (Sub x y)
+(Sub x Z) = x
+(Sub Z y) = Z
+(Sub (S x) (S y)) = (Sub x y) // (x+1)-(y-1) = x-y mesmo caso Nat de acumulo
 
 // Retorna a multiplicação de dois números
 // (Mul x y)
+(Mul x Z) = Z
+(Mul Z y) = Z 
+(Mul (S x) y) = (Add (Mul x y) y) // (x+1)*y = x*y + y 
+
 
 // Retorna o fatorial de um número
 // (Fat x)
+(Fat Z) = (S Z)
+(Fat (S x)) = ( Mul((S x), Fat (x))
 
 // Para os 3 exercícios a seguir, considere também a definição de Booleanos do arquivo anterior
 
 // Retorna se dois números são iguais
 // (Equal x y)
+(Equal Z Z) = True
+(Equal (S x) Z) = False
+(Equal Z (S y)) = False
+(Equal (S x) (S y)) = (Equal x y)
 
 // Retorna se o primeiro arg é maior que o segundo
 // (Maior x y)
+(Maior Z Z) = False
+(Maior Z y) = False
+(Maior (S x) Z) = True
+(Maior (S x) (S y)) = (Maior x y) // vai reduzindo até ver quem é maior, retornando aos casos iniciais
+
 
 // Retorna se o primeiro arg é menor que o segundo
 // (Menor x y)
+(Menor Z Z) = False
+(Menor (S x) Z) = False
+(Menor Z (S y)) = True
+(Menor (S x) (S y)) = (Menor x y)
 
 // SPECIAL BOSS: Retorna a divisão entre dois números, arredondada pra baixo
 // PS.: Retorna 0 em caso de divisão por 0
 // (Div x y)
+(Div x Z) = Z
+(Div Z y) = Z
+(Div x y) = (Menors (Menor x y) x y)
+(Menors True x y) = Z
+(Menors False x y) = (S (Div (Sub x y) y)) // (x-y/y)+1 = x/y
