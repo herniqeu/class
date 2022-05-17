@@ -15,16 +15,48 @@
 // (Func x y)     -> Irá rodar para qualquer valor
 
 // Operação lógica de negação
+// not(a: Bool): Bool
+// case a {
+// true: false
+//false: true}
+
 // (Not x)
+(Not True) = False
+(Not False) = True
 
 // Operação lógica de igualdade
+// equal(a: Bool, b: Bool): Bool
+// case a {true: b false: not(b)}
 // (Equal x y)
+(Equal true y) = y //caso y seja false ou true  true true = true, false false = true, false true = false,true false = false
+(Equal false y) = (Not y) // contrario de y
 
 // Operação lógica E
+//and(a: Bool, b: Bool): Bool
+// case a {
+//     true: b
+//     false: Bool.false
+// }
 // (And x y)
+//(And True y) = y
+//(And False y) = False
 
 // Operação lógica OU
+//or(a: Bool, b: Bool): Bool
+// case a {
+//     true: Bool.true
+//     false: b
+// }
 // (Or x y)
+(Or true y) = True
+(Or false y) = y
 
 // Operação lógica OU Exclusivo
+// xor(a: Bool, b: Bool): Bool
+// case a {
+//     true: not(b)
+//     false: b
+// }
 // (Xor x y)
+(Xor True y) = (Not y)
+(Xor False y) = y
