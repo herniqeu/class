@@ -16,9 +16,7 @@ type Bits {
 //c = Bits.o(Bits.o(Bits.i(Bits.i(Bits.e))))
 //d = Bits.i(Bits.i(Bits.i(Bits.i(Bits.e))))
 
-
 //Verifies if it is an Empty Bit
-
 //is_empty(a)      -> Bool.false
 //is_empty(b)      -> Bool.false
 //is_empty(c)      -> Bool.false
@@ -29,10 +27,7 @@ is_empty(b: Bits): Bool
      e: Bool.true
  }default Bool.false
 
-
-
 //Gets the Tail of a Bits structure
-
 //tail(a) -> Bits.i(Bits.e)
 //tail(b) -> Bits.i(Bits.i(Bits.e))
 //tail(c) -> Bits.o(Bits.i(Bits.i(Bits.e)))
@@ -42,9 +37,7 @@ tail(b: Bits): Bits
      e: Bits.e
  }default b.pred
 
-
 //Negates all Bits
-
 //not(a) -> Bits.o(Bits.o(Bits.e))
 //not(b) -> Bits.i(Bits.o(Bits.o(Bits.e)))
 //not(c) -> Bits.i(Bits.i(Bits.o(Bits.o(Bits.e))))
@@ -79,12 +72,8 @@ dec(b: Bits): Bits
      zero: Nat.to_bits(Nat.succ(Nat.zero))
      succ: Nat.to_bits(Bits.to_nat(b)-1)
  }
-
-
-
-
+ 
 //Concatenate two Bits structures
-
 //concat(a,b) -> Bits.i(Bits.i(Bits.o(Bits.i(Bits.i(Bits.e)
 //concat(b,c) -> Bits.o(Bits.i(Bits.i(Bits.o(Bits.o(Bits.i(Bits.i(Bits.e)))))))
 //concat(c,d) -> Bits.o(Bits.o(Bits.i(Bits.i(Bits.i(Bits.i(Bits.i(Bits.i(Bits.e))))))))
@@ -94,11 +83,8 @@ concat(a: Bits, b: Bits): Bits
       o: Bits.o(concat(a.pred,b))
       i: Bits.i(concat(a.pred,b))
   }
-
-
-
+  
 //Adds two Bits structures
-
 //add(a,b) -> Bits.i(Bits.o(Bits.o(Bits.i(Bits.e))))
 //add(b,c) -> Bits.o(Bits.i(Bits.o(Bits.o(Bits.i(Bits.o(Bits.e))))))
 //add(c,d) -> Bits.i(Bits.i(Bits.o(Bits.i(Bits.o(Bits.i(Bits.e))))))
@@ -109,11 +95,8 @@ add(a: Bits, b: Bits): Bits
       succ zero: a
       succ succ: Nat.to_bits(Nat.add(Bits.to_nat(a),Bits.to_nat(b)))
   }
-
-
-
+  
 //Returns Bits.i if only both bits are Bits.i
-
 //and(a,b) -> Bits.o(Bits.i(Bits.e))
 //and(b,c) -> Bits.o(Bits.o(Bits.i(Bits.e)))
 //and(c,d) -> Bits.o(Bits.o(Bits.i(Bits.i(Bits.e))))
@@ -132,10 +115,7 @@ and(a: Bits,b: Bits): Bits
      }
  }
 
-
-
 //Returns Bits.i if any of bits are Bits.i
-
 //or(a,b) -> Bits.i(Bits.i(Bits.i(Bits.e)))
 //or(b,c) -> Bits.o(Bits.i(Bits.i(Bits.i(Bits.e))))
 //or(c,d) -> Bits.i(Bits.i(Bits.i(Bits.i(Bits.e))))
@@ -155,7 +135,6 @@ or(a: Bits, b: Bits): Bits
   }
 
 //Verifies if both Bit structures are equal
-
 //eql(a,b) -> Bool.false
 //eql(b,c) -> Bool.false
 //eql(d,d) -> Bool.true
@@ -172,14 +151,6 @@ eql(a: Bits, b: Bits): Bool
       }default Bool.false
   }
 
-
-//Reverses a Bits structure
-
-reverse_go(b: Bits, acum: Bits): Bits
-  ?reverse_go
-  
-
-
 //reverse(a) -> Bits.i(Bits.i(Bits.e))
 //reverse(b) -> Bits.i(Bits.i(Bits.o(Bits.e)))
 //reverse(c) -> Bits.i(Bits.i(Bits.o(Bits.o(Bits.e))))
@@ -194,16 +165,6 @@ reverse_go(b: Bits, acum: Bits): Bits
      i: reverse_go(Bits.i(acum),b.pred)
  }
 
-
-
-//Gets the length of the Bits structure
-
-length_go(bs: Bits, acum: Nat): Nat
-  ?length_go
-
-
-
-
 //length(a) -> Nat.succ(Nat.succ(Nat.zero))
 //length(b) -> Nat.succ(Nat.succ(Nat.succ(Nat.zero)))
 //length(c) -> Nat.succ(Nat.succ(Nat.succ(Nat.succ(Nat.zero))))
@@ -213,14 +174,7 @@ lenght(a: Bits): Nat
      e: 0
  }default (1 + lenght(a.pred))
 
-
-
 //Multiplies two Bits structures
-
-mul_go(a: Bits, b: Bits, acum: Bits): Bits
-  ?mul_go
-
-
 //mul(a,b) -> Bits.o(Bits.i(Bits.o(Bits.o(Bits.i(Bits.e)))))
 //mul(b,c) -> Bits.o(Bits.o(Bits.o(Bits.i(Bits.o(Bits.o(Bits.i(Bits.e)))))))
 muly(a: Bits, b: Bits): Bits
@@ -228,10 +182,7 @@ muly(a: Bits, b: Bits): Bits
      succ succ: Nat.to_bits(Nat.mul(Bits.to_nat(a), Bits.to_nat(b)))
  } default Bits.e
 
-
-
 //Drops a n Number of Bits starting from from the least significative bit
-
 //drop(a) -> Bits.i(Bits.e)
 //drop(b) -> Bits.i(Bits.i(Bits.e))
 //drop(c) -> Bits.o(Bits.i(Bits.i(Bits.e)))
@@ -250,11 +201,7 @@ drop(n: Nat, bs: Bits): Bits
      }
  }default Bits.e
 
-  
-
-
 //Takes n Bits from the structure, starting from the least significative bit
-
 //take(1, a) -> Bits.i(Bits.e)
 //take(2, b) -> Bits.o(Bits.i(Bits.e))
 //take(3, c) -> Bits.o(Bits.o(Bits.i(Bits.e)))
