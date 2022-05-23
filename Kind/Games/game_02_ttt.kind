@@ -12,75 +12,67 @@ type TicTacToe {
   )
 }
 
-// Example of a finished game
-// TicTacToe.new(
-//   7,
-//   [ 
-//     [some(TicTacToe.Piece.X), some(TicTacToe.Piece.X), some(TicTacToe.Piece.O)],
-//     [none                   , some(TicTacToe.Piece.X), some(TicTacToe.Piece.O)],
-//     [none                   , some(TicTacToe.Piece.O), some(TicTacToe.Piece.X)]
-//   ]
-// )
-
-
-// The initial board state
-// An empty board
 TicTacToe.init: TicTacToe
-  ?a
+  TicTacToe.new(0, [[none, none, none],
+                    [none, none, none],
+                    [none, none, none]])
 
-// Gets the state of a given position in the board
-// x = Position in the row
-// y = Position in the column
 TicTacToe.get(x: Nat, y: Nat, game: TicTacToe): Maybe<TicTacToe.Piece>
-  ?b
+  open game
+  let line = game.board[y] <> []
+  let elem = line[x] <> none
+  elem
 
-// If possible, converts the user input to a coordinate {x, y}
-// A valid inputs is any pair of 2 numbers separated with a space:
-// "0 2"
-// "4 4"
-// Invalid inputs:
-// "banana"
-// "   "
-TicTacToe.read(input: String): Maybe<Pair<Nat, Nat>>
-	?c
+TicTacToe.Piece.to_string(a: Maybe<TicTacToe.Piece>): String
+  case a {
+    some: case a.value {
+      O: "O"
+      X: "X"
+  }
+}default " "
 
-// Checks if a movement is valid
-// A valid movement is any movement inside the 3x3 board if the tile is unnocupied
-TicTacToe.is_move_valid(coord: Pair<Nat, Nat>, game: TicTacToe): Bool
-	?d
-
-// Who is the next one to play?
 TicTacToe.next_piece(game: TicTacToe): TicTacToe.Piece
-  ?e
+  open game
+  if Nat.is_even(game.turn) then   
+    TicTacToe.Piece.O
+  else
+    TicTacToe.Piece.X
 
-
-// From an input, adds X or O (decided from TicTacToe.next_piece) at given location and increments the turn
 TicTacToe.move(coord: Pair<Nat, Nat>, game: TicTacToe): TicTacToe
-  ?f
+  open game
+  let piece = TicTacToe.next_piece(game)
+  let line = game.board[y] <> []
+  let new_line = line[x] <- some(piece)
+  let new_board = game.board[y] <- new_line
+  TicTacToe.new(Nat.succ(game.turn), new_board)
 
-// Checks if 2 pieces are equal
+TicTacToe.read(line: String): List<Nat>
+  if String.eql(line, "") then []
+  else
+    let chars = String.split(line," ")
+    let nats = List.map!!(Nat.read, chars)
+    List.take!(2, nats)
+
 TicTacToe.Piece.eql(a: Maybe<TicTacToe.Piece>, b: Maybe<TicTacToe.Piece>): Bool
-	?g
+	case a b {
+    X X: Bool.true
+    O O: Bool.true
+    O X : Bool.false
+    X O: Bool.false
+  } 
 
-// Determines a winner if there is one
-TicTacToe.winner(game: TicTacToe): Maybe<TicTacToe.Piece>
-  ?h
+TicTacToe.winner(game: TicTacToe): Maybe<TicTacToe.Piece> 
+  a?
 
-// Converts the piece into a text to be shown
-TicTacToe.Piece.show(a: Maybe<TicTacToe.Piece>): String
-  ?i
-
-// Shows the board
-// Example:
-//
-//  X | X | O 
-// -----------
-//  O | O | X 
-// -----------
-//  X | O | X 
-//
 TicTacToe.show(game: TicTacToe): String
-  ?j
+  open game
+  let a = game
+  let b = TicTacToe.get
+  let board = " " |
+    TicTacToe.Piece.to_string(TicTacToe.get(0,0,game)) | " | " | TicTacToe.Piece.to_string(TicTacToe.get(0,1,game)) | " | " | TicTacToe.Piece.to_string(TicTacToe.get(0,2,game)) | 
+    TicTacToe.Piece.to_string(TicTacToe.get(1,0,game)) | " | " | TicTacToe.Piece.to_string(TicTacToe.get(1,1,game)) | " | " | TicTacToe.Piece.to_string(TicTacToe.get(1,2,game)) | 
+    TicTacToe.Piece.to_string(TicTacToe.get(2,0,game)) | " | " | TicTacToe.Piece.to_string(TicTacToe.get(2,1,game)) | " | " | TicTacToe.Piece.to_string(TicTacToe.get(2,2,game)) | 
+    board
 
 
 Test: IO<Unit>
