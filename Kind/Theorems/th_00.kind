@@ -5,58 +5,101 @@ Nat.divides(a: Nat, b: Nat): Type
   ?Nat.divides
 
 Nat.sub.succ_both(a: Nat, b: Nat): Nat.sub(Nat.succ(a), Nat.succ(b)) == Nat.sub(a, b)
-  ?Nat.sub.succ_both
+  case a {
+    zero: refl
+    succ: case b {
+      zero: refl
+      succ: refl
+    }!
+  }!
 
 Nat.sub.zero_left(a: Nat): Nat.sub(0, a) == 0
-  ?Nat.sub.zero_left
+  case a {
+      zero: refl 
+      succ: refl
+  }!
 
 Nat.mod.mod_one_equals_zero(a: Nat): (a % 1) == 0
-  ?Nat.mod.mod_one_equals_zero
+ Nat.mod.mod_one_equals_zero(a: Nat): (a % 1) == 0
+  case a {
+      zero: refl
+      succ: Nat.mod.mod_one_equals_zero(a.pred)
+    }! 
 
 Nat.mod.zero_mod_equals_zero(a: Nat): (0 % Nat.succ(a)) == 0
-  ?Nat.mod.zero_mod_equals_zero
+  refl
 
 Nat.mod.go_self(a: Nat) (b: Nat): Nat.mod.go(a, a, Nat.succ(b)) == 0
-  ?Nat.mod.go_self
+  case a {
+    zero: refl
+    succ: Nat.mod.go_self(a.pred, Nat.succ(b))
+  }!
 
 Nat.mod.go_mod_one_equals_zero(a: Nat): Nat.mod.go(a, 1, 0) == 0
   ?Nat.mod.go_mod_one_equals_zero
 
 Nat.mod.self(a: Nat): (Nat.succ(a) % Nat.succ(a)) == 0
-  ?Nat.mod.self
+   case a{
+      zero: refl
+      succ: Nat.mod.go_mod_one_equals_zero(a.pred)
+    }!
 
 Nat.succ_inj(a: Nat, b: Nat, eq: Nat.succ(a) == Nat.succ(b)): a == b
-  ?Nat.succ_inj
+  apply(Nat.pred, eq)
 
 Nat.min.small_left(a: Nat, b: Nat): (Nat.min(a, b) <=? a) == true
-  ?Nat.min.small_left
+  case a {
+    zero: refl
+    succ: case b {
+      zero: refl
+      succ: Nat.min.small_left(a.pred, b.pred)
+    }!
+  }!
 
 Nat.min.small_right(a: Nat, b: Nat): (Nat.min(a, b) <=? b) == true
-  ?Nat.min.small_right
+  case a {
+    zero: refl
+    succ: case b {
+      zero: refl
+      succ: Nat.min.small_right(a.pred, b.pred)
+    }!
+  }!
 
 Nat.min.small(
-  a: Nat
-  b: Nat
-): And<(Nat.min(a, b) <=? a) == true, (Nat.min(a, b) <=? b) == true>
-  ?Nat.min.small
+    a: Nat 
+    b: Nat): And<(Nat.min(a, b) <=? a) == true, (Nat.min(a, b) <=? b) == true>
+   {Nat.min.small_left(a,b), Nat.min.small_right(a,b)}
 
 Nat.gcd.self(a: Nat): Nat.gcd(a,a) == a
-  ?Nat.gcd.self
+  
 
 Nat.gcd.succ(a: Nat)(b: Nat): Nat.gcd(Nat.succ(a),b) == Nat.gcd(Nat.mod(b, Nat.succ(a)), Nat.succ(a))
-  ?Nat.gcd.succ
+  refl
 
 Nat.gcd.zero_right(a: Nat): Nat.gcd(a,0) == a
-  ?Nat.gcd.zero_right
+   case a {
+    zero: refl
+    succ: refl
+  }!
 
 Nat.gcd.zero_left(a: Nat): Nat.gcd(0,a) == a
-  ?Nat.gcd.zero_left
 
 Nat.lte.zero_right(n: Nat, Hyp: Nat.lte(n, 0) == true): n == 0
-  ?Nat.lte.zero_right
+   case a {
+    zero: refl
+    succ:
+      let p = Nat.add.succ_right(a.pred, b)
+      apply(Nat.succ, p)
+  }!
 
 Nat.add.succ_right(a: Nat, b: Nat): (a + Nat.succ(b)) == Nat.succ(Nat.add(a,b))
-  ?Nat.add.succ_right
+  case a {
+    zero: refl
+    succ:
+      let h = Nat.add.succ_right(a.pred, b)
+      let h1 = apply(Nat.succ, h)
+      h1
+  }!
 
 Nat.add.cancel_left(a: Nat, b: Nat, c: Nat, e0: (a + b) == a + c): b == c
   ?Nat.add.cancel_left
@@ -65,7 +108,13 @@ Nat.add.comm(a: Nat, b:Nat): (a + b) == (b + a)
   ?Nat.add.comm
 
 Nat.add.zero_right(a: Nat): (a + 0) == a
-  ?Nat.add.zero_right
+    case a {
+    zero: refl
+    succ: 
+      let p0 = Nat.add.zero_right(a.pred)
+      let p1 = apply(Nat.succ, p0)
+      p1
+  }!
 
 Nat.add.cancel_right(a: Nat, b: Nat, c: Nat, h: (a + b) == c + b): a == c
   ?Nat.add.cancel_right
@@ -78,10 +127,28 @@ Nat.add.assoc(
   b: Nat
   c: Nat
 ): ((a + b) + c) == a + (b + c)
-  ?Nat.add.assoc
+  case a {
+   zero:
+     Equal.refl<Nat>(Nat.add(b, c))
+   succ: 
+    let asso = Nat.add.assoc(a.pred, b, c)
+    Equal.apply<Nat, Nat>(
+      Nat.add(Nat.add(a.pred,b),c), Nat.add(a.pred,Nat.add(b,c)),
+      Nat.succ, asso
+    )
+ }!
 
 Nat.mul.one_right(a: Nat): (a * 1) == a
-  ?Nat.mul.one_right
+  case a {
+    zero:
+      Equal.refl<Nat>(0)
+    succ:
+      let ind = Nat.mul.one_right(a.pred)
+      let qed = Equal.apply<Nat, Nat>(
+        Nat.mul(a.pred, 1), a.pred, Nat.succ, ind
+      )
+      qed
+  }: Equal<Nat>(Nat.mul(a, 1), a)
 
 Nat.mul.distrib_left(
   a: Nat
@@ -91,7 +158,7 @@ Nat.mul.distrib_left(
   ?Nat.mul.distrib_left
 
 Nat.mul.one_left(a: Nat): (1 * a) == a
-  ?Nat.mul.one_left
+  refl
 
 Nat.mul.succ_right(a: Nat, b: Nat): (a * Nat.succ(b)) == a + (a * b)
   ?Nat.mul.succ_right
@@ -100,14 +167,19 @@ Nat.mul.comm(a: Nat, b: Nat): (a * b) == b * a
   ?Nat.mul.comm
 
 Nat.mul.succ_left(a: Nat, b: Nat): (Nat.succ(a) * b) == b + (a * b)
-  ?Nat.mul.succ_left
+  Equal.refl<Nat>(Nat.mul(Nat.succ(a), b))
 
 Nat.mul.zero_right(a: Nat): (a * 0) == 0
   ?Nat.mul.zero_right
 
 Nat.mul.zero_left(a: Nat): (0 * a) == 0
-  ?Nat.mul.zero_left
+   case a {
+    zero:
+      Equal.refl<Nat>(0)
+    succ: 
+      let ly = Nat.mul.zero_left(a.pred)
+      ly
+  }: Equal<Nat>(Nat.mul(0, a), 0)
 
 Nat.mul.assoc(a: Nat, b: Nat, c: Nat): (a * b * c) == (a * b) * c
   ?Nat.mul.assoc
-
