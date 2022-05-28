@@ -30,7 +30,7 @@ Char: Type
 //is_upper('A') -> Bool.true
 //is_upper('0') -> Bool.false
 is_upper(x: Char): Bool
-  ?is_upper
+  U16.lte(x,96)
 
 
 
@@ -40,7 +40,7 @@ is_upper(x: Char): Bool
 //is_lower('A') -> Bool.false
 //is_lower('0') -> Bool.false
 is_lower(x: Char): Bool
-  ?is_lower
+  U16.gte(x,97)
 
 
 
@@ -50,7 +50,14 @@ is_lower(x: Char): Bool
 //is_digit('A') -> Bool.false
 //is_digit('0') -> Bool.true
 is_digit(x: Char): Bool
-  ?is_digit
+  case U16.lte(x,64) {
+   true: Bool.true 
+   false: case U16.lte(x,96){
+     true: U16.gte(x,91) 
+     false: U16.gte(x,123)
+   }
+ }
+
 
 
 
@@ -60,7 +67,7 @@ is_digit(x: Char): Bool
 //is_equal('A', '0') -> Bool.false
 //is_equal('0', '0') -> Bool.true
 equal(x: Char, y: Char): Bool
-  ?equal
+   U16.eql(x,y)
 
 
 
@@ -70,7 +77,7 @@ equal(x: Char, y: Char): Bool
 //to_digit('1') -> Nat.succ(Nat.zero)
 //to_digit('4') -> 4
 to_digit(x: Char): Nat
-  ?to_digit
+  Nat.sub(U16.to_nat(x),48)
 
 
 
@@ -80,7 +87,13 @@ to_digit(x: Char): Nat
 //to_lower('B') -> 'b'
 //to_lower('Z') -> 'z'
 to_lower(x: Char): Char
-  ?to_lower
+  case U16.gte(x,'A'){
+    true: case U16.lte(x,'Z') {
+      true: U16.add(x,32#16)
+      false: x
+    }
+    false: x
+  }
 
 
 
@@ -90,8 +103,14 @@ to_lower(x: Char): Char
 //to_upper('b') -> 'B'
 //to_upper('z') -> 'Z'
 to_upper(x: Char): Char
-  ?to_upper
-
+   case U16.gte(x,'a') {
+   true: case U16.lte(x,'z'){
+     true: U16.sub(x,32#16)
+     false: x
+   }
+   false: x
+ }
+  
 
 
 
@@ -119,7 +138,10 @@ type String {
 //concat(a,b) -> "HiHello"
 //concat(b,c) -> "Hellotext"
 concat(xs: String, ys: String): String
-  ?concat
+  case xs {
+  nil: []
+  cons: List.cons!(xs.head,concat(xs.tail,ys))
+}
 
 
 
@@ -127,7 +149,11 @@ concat(xs: String, ys: String): String
 
 //map(to_lower, a) -> "hi"
 map(fn: Char -> Char, xs: String): String
-  ?map
+  case xs {
+    nil: String.nil
+    cons: List.cons(fn(xs.head),map(xs.tail))
+  }  
+
 
 
 
@@ -135,7 +161,12 @@ map(fn: Char -> Char, xs: String): String
 
 //string_to_upper(c) -> "TEXT"
 string_to_upper(xs: String): String
-  ?to_upper
+  //map(to_upper,xs)
+
+case xs {
+   nil: String.nil
+   cons: List.cons(to_upper(xs.head),string_to_upper(xs.tail))
+ }  
 
 
 
@@ -145,7 +176,10 @@ string_to_upper(xs: String): String
 //to_bits(b) -> "0000000001101111 0000000001101100 00000000011011000 000000001100101 0000000001001000"
 //to_bits(c) -> "0000000001110100 0000000001111000 00000000011001010 000000001110100"
 to_bits(xs: String): Bits
-  ?to_bits
+  case xs {
+   nil: String.nil 
+   cons: List.cons(U16to_bits(xs.head),to_bits(xs.tail))
+ }
 
 
 
@@ -155,7 +189,13 @@ to_bits(xs: String): Bits
 //stringequal(a, b) -> Bool.false
 //stringequal(b, c) -> Bool.false
 stringequal(xs: String, ys: String): Bool
-  ?stringequal
+  case xs ys {
+    nil nil: Bool.true
+    cons cons: case U16.eql(xs.head,ys.head){
+      true: stringequal(xs.tail,ys.tail)
+      false: Bool.false
+    }
+  }default Bool.false
 
 
 
@@ -171,10 +211,16 @@ is_nat(xs: String): Bool
 
 // Divides the elements of a String into a list, using a match you decide
 
-//split(b, "l") -> ["He","" , "o"
+//split(b, "l") -> ["He","" , "o"]
 //split(c, "e") -> ["t", "xt"]
 split(xs: String, match: String): List<String>
-  ?split
+  case xs {
+   nil: []
+   cons: case Char.eql(xs.head,String.to_char(match)) {
+     true: split(xs.tail,match)
+     false: List.cons!(xs.head,split(xs.tail,match))
+   }
+ }
 
 
 
@@ -184,7 +230,13 @@ split(xs: String, match: String): List<String>
 //take_while(is_lower,    b) -> ""
 //take_while(is_equal('t'), c) -> "t"
 take_while(cond: Char -> Bool, xs: String): String
-  ?take_while
+  case xs {
+    nil: []
+    cons: Char.eql(xs.head,cond(xs.head)){
+      true: List.cons(xs.head,take_while(cond,xs.tail))
+      false: []
+    }
+  }
 
 
 
@@ -194,7 +246,13 @@ take_while(cond: Char -> Bool, xs: String): String
 //find(b, "l") -> 2
 //find(c, "x") -> 2
 find(xs: String, x: Char): Nat
-  ?find
+  case xs {
+    nil: 0 
+    cons: case Char.eql(xs.head,x){
+      true: Nat.zero
+      false: Nat.succ(find(xs.tail,x))
+    }
+  }
 
 
 //Filters the String and discards all the Chars that doesn't satisfy given condition 
@@ -203,14 +261,19 @@ find(xs: String, x: Char): Nat
 //filter(is_lower,      b) -> "ello"
 //filter(is_equal('t'), c) -> "tt"
 filter(cond: Char -> Bool, xs: String): String
-  ?filter
+  case xs {
+    nil: String.nil 
+    cons: case Char.eql(cond(xs.head),xs.head){
+      true: List.cons(xs.head,filter(cond,xs.tail))
+      false: []
+    }
+  }
 
 
 //Concatenates all elements of a List of Strings
 
 //flatten([a,b,c]) -> "HIHellotext"
-flatten(lxs: List<String>): String
-  ?flatten
+flatten(lxs: List<String>): String  
 
 
 
@@ -220,7 +283,14 @@ flatten(lxs: List<String>): String
 //drop(2, b) -> "llo"
 //drop(3, c) -> "t"
 drop(n: Nat, xs: String): String
-  ?stringdrop
+  case reverse.go(xs) {
+   nil: []
+   cons: case n {
+     zero: xs 
+     cons: List.cons(reverse.go(xs.head),drop(n.pred,xs.tail))
+   }
+ }
+
 
 
 
@@ -231,7 +301,14 @@ drop(n: Nat, xs: String): String
 //take(2, b) ->  "He"
 //take(3, c) ->  "tex"
 take(n: Nat xs: String): String
-  ?stringtake
+  case xs {
+    nil: String.nil 
+    cons:case n {
+      zero: xs 
+      succ: List.cons(xs.head,drop(n.pred,xs.tail))
+    } 
+  }
+
 
 
 
