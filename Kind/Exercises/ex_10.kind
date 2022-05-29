@@ -222,13 +222,19 @@ is_nat(xs: String): Bool
 //split(b, "l") -> ["He","" , "o"]
 //split(c, "e") -> ["t", "xt"]
 split(xs: String, match: String): List<String>
-  case xs {
+ split_aux(xs,match,[])
+
+split_aux(xs: String,match: String, acum: List<String>): List<String> 
+ case xs {
    nil: []
-   cons: case Char.eql(xs.head,String.to_char(match)) {
-     true: split(xs.tail,match)
-     false: List.cons!(xs.head,split(xs.tail,match))
+   cons: case String.eql(Char.to_string(xs.head),match) {
+     true: List.cons(xs.head,split_aux(xs.tail,match,acum))
+     false: 
+     let acum = List.append(xs.head)
+     List.cons(acum,split_aux(xs.tail,match,acum))
    }
  }
+
 
 
 
