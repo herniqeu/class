@@ -33,3 +33,47 @@ smallest(xs: List<Nat>): Nat
      }
    }
  }
+ -----------------------------------------------------------------------------------------------------------------------
+ 
+ reverse<A: Type>(xs: List<A>): List<A>
+  reverse.go<A>(List.nil<A>, xs)
+
+reverse.go<A: Type>(new_list: List<A>, old_list: List<A>): List<A>
+  case old_list {
+      nil: new_list
+      cons: reverse.go!(List.cons!(old_list.head,new_list), old_list.tail)
+  }
+
+length<A: Type>(xs: List<A>): Nat
+  case xs {
+      nil: 0
+      cons: Nat.succ(lenght!(xs.tail)) // tamanho do final + 1
+  }
+
+String.equal(to_remove: String, str: String): Bool 
+ case str {
+     nil: case to_remove {
+         nil: true
+         cons: false
+     }
+     cons: case Char.eql(to_remove.head,str) {
+         true: String.equal(to_remove.tail,str.tail)
+         false: String.equal(to_remove,str.tail)
+     }
+ }
+
+find(to_remove: String,str: String,acum: String): String 
+ case str {
+    nil: String.nil 
+    cons: case to_remove {
+        nil: String.cons(reverse(acum.tail),str) // pega o q sobrou se Nat.gtn(lenght(to_remove),lenght(to_add)) for false 
+        cons: case String.equal(to_remove, str) {
+            true:  case Char.eql(to_remove.head,str.head) {
+                true: String.cons(to_add.head,find(to_remove.tail,str.tail,String.cons(to_add[lenght(to_add)-1],acum))) // caso subsituir e sub 
+                false: String.cons(to_remove.head,find(to_remove.tail,str.tail,acum))
+            }
+            false: str // caso de nn ter a palavra dentro 
+        } 
+        }
+    }
+
