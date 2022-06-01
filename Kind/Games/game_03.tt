@@ -1,0 +1,118 @@
+get_first_num(exp: String): String
+ get_first_num.go(exp,"")
+
+get_first_num.go(exp: String,acum: String): String 
+ case exp {
+     nil: String.nil 
+     cons: case U16.gte(exp.head,48){
+         true: case U16.lte(exp.head,57) {
+             true: get_first_num.go(exp.tail,String.cons(exp.head,acum))
+             false: reverse(acum)
+         }
+         false: reverse(acum)
+     }
+ }
+
+reverse(str: String): String 
+ reverse.go(str,"")
+
+reverse.go(str: String, acum: String): String 
+ case str {
+     nil: acum
+     cons: reverse.go(str.tail,String.cons(str.head,acum))
+ }
+
+get_operator(exp: String): Char
+ case exp {
+     nil: 'a'
+     cons: case U16.gte(exp.head, 43){
+         true: case U16.lte(exp.head,47){
+             true: exp.head 
+             false: get_operator(exp.tail)
+         }
+         false: get_operator(exp.tail)
+     }
+ }
+
+get_second_num(exp: String): String
+ case exp {
+     nil: String.nil 
+     cons: case exp.tail {
+         nil: String.nil 
+         cons: case U16.lte(exp.head,47) {
+             true: exp.tail.tail
+             false: get_second_num(exp.tail)
+         }
+     }
+ }
+
+is_expression_valid(fst: String, op: Char, snd: String): Bool 
+ case fst {
+     nil: false
+     cons: case snd {
+         nil: false 
+         cons: case valid(fst) valid(snd) {
+             true true: true
+         }default false 
+     }
+ }
+
+valid(n: String): Bool 
+ case n {
+     nil: true
+     cons: case U16.gte(n.head,48){
+         true: case U16.lte(n.head,57){
+             true: valid(n.tail)
+             false: false
+         }
+         false: false
+     }
+ }
+
+get_result(fst: Nat,op: Char, snd: Nat): Nat 
+ case U16.eql(42,op){
+     true: Nat.mul(fst,snd)
+     false: case U16.eql(43,op) {
+         true: Nat.add(fst,snd)
+         false: case U16.eql(45,op){
+             true: Nat.sub(fst,snd)
+             false: case U16.eql(47,op){
+                 true: Nat.div(fst,snd)
+                 false: 0
+             }
+         }
+     }
+ }
+
+
+x: _ 
+get_result(123,'+',234)
+
+game_03_clctr: IO<Unit>
+	IO {
+		IO.print("Digite sua expressão: ")
+		get exp = IO.get_line // Assign the user input to the variable exp as a String
+
+		let first_num  = get_first_num(exp)
+		let second_num = get_second_num(exp)
+		let operator   = get_operator(exp)
+
+Bits.to_nat((String.to_bits(first_num)))
+Bits.to_nat((String.to_bits(get_second_num)))
+
+
+		case is_expression_valid(first_num, operator, second_num) {
+			true:
+			  // Displays "exp" result and restarts the program 
+				IO {
+					IO.print(get_result(Bits.to_nat((String.to_bits(first_num))),operator,Bits.to_nat((String.to_bits(get_second_num)))))
+					game_03_clctr
+				} 
+			false:
+				// Displays a message in case exp is invalid and restarts the program 
+				IO {
+				IO.print("Expressão inválida")
+				game_03_clctr
+				}   
+		} 
+	}
