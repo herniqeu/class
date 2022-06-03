@@ -52,11 +52,11 @@ mut<A: Type>(key: Bits, fn: A -> A, map: BitsMap<A>): BitsMap<A>
       }
     } 
     i: case map { // 1 direita 
-      new: BitsMap.tie<A>(Maybe.none<A>,BitsMap.new<A>, BitsMap.mul<A>(bits.pred,fn,  BitsMap.new<A>))
+      new: BitsMap.tie<A>(Maybe.none<A>,BitsMap.new<A>, mut<A>(bits.pred,fn,  BitsMap.new<A>))
       tie: BitsMap.tie<A>(map.val, mut<A>(bits.pred, fn, map.lft), map.rgt)
     }
     o: case map { // 0 esquerda
-      new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.new<A>, BitsMap.mut<A>(bits.pred, ini, fun, BitsMap.new<A>)),
+      new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.new<A>, mut<A>(bits.pred, fn, BitsMap.new<A>)),
       tie: BitsMap.tie<A>(map.val, map.lft, mut<A>(bits.pred,fn, map.rgt)),
     }
   }
