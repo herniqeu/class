@@ -15,11 +15,11 @@ set<A: Type>(key: Bits, val: A, map: BitsMap<A>): Maybe<A>
    } 
    i: case map { // 0 1 esquerda direita
      new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.new<A>, BitsMap.set<A>(bits.pred,val, BitsMap.new<A>))
-     tie: BitsMap.tie<A>(map.val, map.lft, BitsMap.set<A>(bits.pred,val,map.rgt))
+     tie: BitsMap.tie<A>(map.val, map.lft, set<A>(bits.pred,val,map.rgt))
    } 
    o: case map {
      new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.set<A>(bits.pred,val, BitsMap.new<A>), BitsMap.new<A>)
-     tie: BitsMap.tie<A>(map.val, BitsMap.set!(bits.pred, val, map.lft), map.rgt)
+     tie: BitsMap.tie<A>(map.val, set<A>(bits.pred, val, map.lft), map.rgt)
    }
  }
 
@@ -28,7 +28,7 @@ set<A: Type>(key: Bits, val: A, map: BitsMap<A>): Maybe<A>
 // Given a key, gets the value that correspond to the given key, 
 // If there it is no value for the key, returns Maybe.none<A>
 
-BitsMap.get<A: Type>(key: Bits, map: BitsMap<A>): Maybe<A>
+get<A: Type>(key: Bits, map: BitsMap<A>): Maybe<A>
 case map {
    new: Maybe.none<A>
    tie: case key {
@@ -53,11 +53,11 @@ mut<A: Type>(key: Bits, fn: A -> A, map: BitsMap<A>): BitsMap<A>
     } 
     i: case map { // 1 direita 
       new: BitsMap.tie<A>(Maybe.none<A>,BitsMap.new<A>, BitsMap.mul<A>(bits.pred,fn,  BitsMap.new<A>))
-      tie: BitsMap.tie<A>(map.val, BitsMap.mut<A>(bits.pred, fn, map.lft), map.rgt)
+      tie: BitsMap.tie<A>(map.val, mut<A>(bits.pred, fn, map.lft), map.rgt)
     }
     o: case map { // 0 esquerda
       new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.new<A>, BitsMap.mut<A>(bits.pred, ini, fun, BitsMap.new<A>)),
-      tie: BitsMap.tie<A>(map.val, map.lft, BitsMap.mut<A>(bits.pred, fun, map.rgt)),
+      tie: BitsMap.tie<A>(map.val, map.lft, mut<A>(bits.pred,fn, map.rgt)),
     }
   }
 
@@ -72,6 +72,15 @@ mut<A: Type>(key: Bits, fn: A -> A, map: BitsMap<A>): BitsMap<A>
 
 //del<A: Type>(...)
 
+del<A: Type>(key: Bits, map: BitsMap<A>): Maybe<A> 
+ case map {
+   new: Maybe.new<A>
+   tie: case key {
+     e: BitsMap.tie<A>(Maybe.none,A>, map.lft, map.rgt)
+     i: BitsMap.tie<A>(map.val,map.lft,del<A>(key.pred,map.lft))
+     o: BitsMap.tie<A>(map.val,del<A>(key.pred,map.lft),map.rgt)
+   }
+ }
 
 //Verifies if has any value for the given key, if has no value returns false, if
 //has the value returns true
