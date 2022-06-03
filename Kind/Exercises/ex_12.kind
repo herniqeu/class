@@ -91,7 +91,15 @@ del<A: Type>(key: Bits, map: BitsMap<A>): Maybe<A>
   // returns a Bool
 
 //has...
-
+has<A: Type>(key: Bits, map: BitsMap<A>): Bool 
+ case map {
+   new: false
+   tie: case key {
+     e: true 
+     i: has<A>(key,map.rgt)
+     o: has<A>(key,map.lft)
+   }
+ }
 
 
 //Verifies all values of the map and if they don't match the condition gets
@@ -106,7 +114,13 @@ filter<A: Type>(cond: A -> Bool, map: BitsMap<A>): BitsMap<A>
 //Applies a function to  all values of the map and returns the map modified 
 
 map<A: Type, B: Type>(fn: A -> B, map: BitsMap<A>): BitsMap<B>
-  ?map
+  case map {
+    new: BitsMap.new<A>
+    tie: case map.val {
+      none:  BitsMap.tie<A>(Maybe.none<B>, map<A,B>(fn, map.lft), map<A,B>(fn,map.rgt))
+      some:  BitsMap.tie<A>(Maybe.some<B>(fn(map.val)), map<A,B>(fn, map.lft), map<A,B>(fn, map.rgt))
+    }
+  }
 
 
 
