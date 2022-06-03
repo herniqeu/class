@@ -57,7 +57,7 @@ mut<A: Type>(key: Bits, fn: A -> A, map: BitsMap<A>): BitsMap<A>
     }
     o: case map { // 0 esquerda
       new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.new<A>, BitsMap.mut<A>(bits.pred, ini, fun, BitsMap.new<A>)),
-      tie: BitsMap.tie<A>(map.val, map.lft, BitsMap.mut<A>(bits.pred, ini, fun, map.rgt)),
+      tie: BitsMap.tie<A>(map.val, map.lft, BitsMap.mut<A>(bits.pred, fun, map.rgt)),
     }
   }
 
