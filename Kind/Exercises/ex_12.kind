@@ -29,21 +29,14 @@ set<A: Type>(key: Bits, val: A, map: BitsMap<A>): Maybe<A>
 // If there it is no value for the key, returns Maybe.none<A>
 
 BitsMap.get<A: Type>(key: Bits, map: BitsMap<A>): Maybe<A>
-  case key {
-    e: case map {
-      new: Maybe.none<A>,
-      tie: map.val,
-    }, 
-    o: case map { //0
-      new: Maybe.none<A>,
-      tie: BitsMap.get<A>(bits.pred, map.lft),
-    },
-    i: case map { //1
-      new: Maybe.none<A>,
-      tie: BitsMap.get<A>(bits.pred, map.rgt),
-    }
-  }
-
+case map {
+   new: Maybe.none<A>
+   tie: case key {
+     e: map.val 
+     i: BitsMap.get<A>(bits.pred,map.rgt)
+     o: BitsMap.get<A>(bits.pred,map.lft)
+   }
+ }
 
 //Applies a function to a Value of the specific key and returns the same map but
 //with the specific value applied to the function, if the value isnt find,
