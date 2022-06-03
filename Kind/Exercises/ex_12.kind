@@ -1,0 +1,92 @@
+type BitsMap<A: Type> { 
+  new
+  tie(val: Maybe<A>, lft: BitsMap<A>, rgt: BitsMap<A>)
+}
+
+// Given a Key and a Value, sets the given value to that key in the tree, if
+// that key already belongs to another value, it should be replaced with the new
+// one
+
+set<A: Type>(key: Bits, val: A, map: BitsMap<A>): Maybe<A>
+  ?set
+
+
+
+// Given a key, gets the value that correspond to the given key, 
+// If there it is no value for the key, returns Maybe.none<A>
+
+BitsMap.get<A: Type>(key: Bits, map: BitsMap<A>): Maybe<A>
+  case key {
+    e: case map {
+      new: Maybe.none<A>,
+      tie: map.val,
+    }, 
+    o: case map { //0
+      new: Maybe.none<A>,
+      tie: BitsMap.get<A>(bits.pred, map.lft),
+    },
+    i: case map { //1
+      new: Maybe.none<A>,
+      tie: BitsMap.get<A>(bits.pred, map.rgt),
+    }
+  }
+
+
+//Applies a function to a Value of the specific key and returns the same map but
+//with the specific value applied to the function, if the value isnt find,
+//doesn't change the map
+
+mut<A: Type>(key: Bits, fn: A -> A, map: BitsMap<A>): BitsMap<A>
+  ?mut
+
+
+//Deletes a Value of the map within the given key, returns the same map if no
+//value is found for that key
+
+//Receives:
+  // key of the type Bits
+  // map of the type BitsMap<A>
+  // returns a Maybe<A>
+
+//del<A: Type>(...)
+
+
+//Verifies if has any value for the given key, if has no value returns false, if
+//has the value returns true
+  
+//Receives:
+  // key of the type Bits
+  // map of the type BitsMap<A>
+  // returns a Bool
+
+//has...
+
+
+
+//Verifies all values of the map and if they don't match the condition gets
+//removed, if the condition is matched, the value and the key are kept
+
+
+filter<A: Type>(cond: A -> Bool, map: BitsMap<A>): BitsMap<A>
+  ?filter
+
+
+
+//Applies a function to  all values of the map and returns the map modified 
+
+map<A: Type, B: Type>(fn: A -> B, map: BitsMap<A>): BitsMap<B>
+  ?map
+
+
+
+// Returns a list of keys with all Keys of the map
+
+key<A: Type>(map: BitsMap<A>): List<Bits>
+  ?key
+
+
+
+//Unites two different maps into one, keeping its structure
+
+union<A: Type>(a: BitsMap<A>, b: BitsMap<A>): BitsMap<A>
+  ?union
