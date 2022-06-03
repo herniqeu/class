@@ -8,7 +8,20 @@ type BitsMap<A: Type> {
 // one
 
 set<A: Type>(key: Bits, val: A, map: BitsMap<A>): Maybe<A>
-  ?set
+ case key {
+   e: case map {
+     new: BitsMap.tie<A>(Maybe.some<A>(val), BitsMap.new<A>, BitsMap.new<A>) // val lft rgt 
+     tie: BitsMap.tie<A>(Maybe.some<A>(val), map.lft , map.rgt) 
+   } 
+   i: case map { // 0 1 esquerda direita
+     new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.new<A>, BitsMap.set<A>(bits.pred,val, BitsMap.new<A>))
+     tie: BitsMap.tie<A>(map.val, map.lft, BitsMap.set<A>(bits.pred,val,map.rgt))
+   } 
+   o: case map {
+     new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.set<A>(bits.pred,val, BitsMap.new<A>), BitsMap.new<A>)
+     tie: BitsMap.tie<A>(map.val, BitsMap.set!(bits.pred, val, map.lft), map.rgt)
+   }
+ }
 
 
 
@@ -37,7 +50,23 @@ BitsMap.get<A: Type>(key: Bits, map: BitsMap<A>): Maybe<A>
 //doesn't change the map
 
 mut<A: Type>(key: Bits, fn: A -> A, map: BitsMap<A>): BitsMap<A>
-  ?mut
+  case key {
+    e: case map {
+      new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.new!, BitsMap.new) //dont change
+      tie: case map.val {
+        none: BitsMap.tie<A>(Maybe.none<A>, map.lft,map.rgt)
+        some: BitsMap.tie<A>(Maybe.some<A>(fn(map.val)),map.lft,map.rgt)
+      }
+    } 
+    i: case map { // 1 direita 
+      new: BitsMap.tie<A>(Maybe.none<A>,BitsMap.new<A>, BitsMap.mul<A>(bits.pred,fn,  BitsMap.new<A>))
+      tie: BitsMap.tie<A>(map.val, BitsMap.mut<A>(bits.pred, fn, map.lft), map.rgt)
+    }
+    o: case map { // 0 esquerda
+      new: BitsMap.tie<A>(Maybe.none<A>, BitsMap.new<A>, BitsMap.mut<A>(bits.pred, ini, fun, BitsMap.new<A>)),
+      tie: BitsMap.tie<A>(map.val, map.lft, BitsMap.mut<A>(bits.pred, ini, fun, map.rgt)),
+    }
+  }
 
 
 //Deletes a Value of the map within the given key, returns the same map if no
