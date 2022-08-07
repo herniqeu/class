@@ -1,43 +1,53 @@
-// type PairBool
-// Contains 2 Booleans inside it
-type PairBool { 
-  new(fst: Bool, snd: Bool)
-}
+PairBool: Type 
+PairBool.new (fst: Bool) (snd: Bool): PairBool 
+
+Bool: Type
+Bool.true : Bool 
+Bool.false : Bool 
 
 // Returns the first element of a pair
-fst(pair: PairBool): Bool
-  ?f
+
+PairBool.fst (x: PairBool): Bool 
+PairBool.fst (PairBool.new x y) = x
 
 // Returns the second element of a pair
-snd(pair: PairBool): Bool
-  ?s
+
+PairBool.snd (x: PairBool): Bool 
+PairBool.snd (PairBool.new x y) = y 
 
 // Returns true if both elements of a PairBool are identical
-eql_elements(pair: PairBool): Bool 
-  ?l
-  
+
+PairBool.eql (x: PairBool): Bool 
+PairBool.eql (PairBool.new x y) = (Bool.eql x y)
+
+Bool.eql (x: Bool) (y: Bool): Bool 
+Bool.eql Bool.true y = y 
+Bool.eql Bool.false y = (Bool.not y)
+
+Bool.not (x: Bool): Bool 
+Bool.not Bool.true = Bool.false 
+Bool.not Bool.false = Bool.true 
+
 // Returns true if both Pairs are equal 
-// eql(PairBool.new(false, false), PairBool.new(true, true)) -> false 
-// eql(PairBool.new(true, false), PairBool.new(true, false)) -> true
-eql(a: PairBool, b: PairBool): Bool
-  ?e
+PairBool.eqlo (x: PairBool) (y: PairBool): Bool 
+PairBool.eqlo (PairBool.new a b) (PairBool.new c d) = (Bool.and (Bool.eql a c) (Bool.eql b d ))
+
+Bool.and (x: Bool) (y: Bool): Bool 
+Bool.and Bool.true y = y
+Bool.and Bool.false y = Bool.false
 
 // Returns true if both Pairs are different
-// not_eql(PairBool.new(false, false), PairBool.new(true, true)) -> true 
-// not_eql(PairBool.new(true, false), PairBool.new(true, false)) -> false
-not_eql(a: PairBool, b: PairBool): Bool
-  ?f
-  
+PairBool.eqlo1 (x: PairBool) (y: PairBool): Bool
+PairBool.eqlo1 (PairBool.new a b) (PairBool.new c d) = (Bool.and (Bool.not (Bool.eql a c)) (Bool.not (Bool.eql b d)))
+
 // Creates a PairBool from 2 Booleans
-create(a: Bool, b: Bool): PairBool
-  ?e
+PairBool.Creates (x: Bool) (y: Bool): PairBool 
+PairBool.Creates x y = (PairBool.new x y)
 
 // Inverts the values of a PairBool
-// neg(PairBool.new(false, false)) -> PairBool.new(true, true)
-// neg(PairBool.new(false, true)) -> PairBool.new(true, false)
-neg(pair: PairBool): PairBool
-  ?n
+PairBool.neg (x: PairBool): PairBool
+PairBool.neg (PairBool.new x y) = (PairBool.new (Bool.not x) (Bool.not y))
 
 // Inverts the 2 elements of a PairBool
-swap(pair: PairBool): PairBool 
-  ?s
+PairBool.swap (x: PairBool) : PairBool 
+PairBool.swap (PairBool.new x y) = (PairBool.new y x)
