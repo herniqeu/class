@@ -1,22 +1,23 @@
-// Basic Exercises involving Pairs
+Pair (a: Type) (b: Type) : Type 
+Pair.new <a> <b> (fst: a) (snd: b) : (Pair a b)
 
-type Pair <A: Type, B: Type> {
-  new(fst: A, snd: B)
-}
-
-// Example:
 // Swaps the elements of a pair
-swap<A: Type, B: Type>(pair: Pair<A,B>): Pair<B,A>
-  ?s
+
+Pair.swap <a: Type> <b: Type> (pair: (Pair a b)) : (Pair b a)
+Pair.swap a b (Pair.new pair.a pair.b fst snd) = (Pair.new pair.b pair.a snd fst)
 
 // Returns the first element of a pair
-first<A: Type, B: Type>(pair: Pair<A,B>): A
-  ?a
+Pair.first <a: Type> <b: Type> (pair: (Pair a b)) : a
+Pair.first a b (Pair.new pair.a pair.b fst snd) = fst
 
 // Returns the second element of a pair
-second<A: Type, B: Type>(pair: Pair<A,B>): B
-  ?a
+Pair.second <a: Type> <b: Type> (pair: (Pair a b)) : b
+Pair.second a b (Pair.new pair.a pair.b fst snd) = snd
+
+// Creates a Pair from 2 element
+Pair.create <a: Type> <b: Type> (x: a) (y: b): (Pair a b)
+Pair.create a b x y = (Pair.new x y)
 
 // Applies a function to both elements of a Pair
-map<A: Type, B: Type>(fn: A -> B, pair: Pair<A,A>): Pair<B,B>
-  ?a
+Pair.map <a: Type> <b: Type> (fn: (x: a) b) (pair: (Pair a a)) : (Pair b b)
+Pair.map a b fn (Pair.new pair.a pair.b fst snd) = (Pair.new (fn fst) (fn snd))
