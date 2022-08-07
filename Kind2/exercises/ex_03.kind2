@@ -1,22 +1,20 @@
-// Basic Exercises involving Nats
-
-type Nat {
-  zero
-  succ(pred: Nat)
-}
+Nat: Type
+Nat.zero: Nat
+Nat.succ(pred:Nat): Nat 
 
 // Increment
-// 2 + 1 = 3
-// 0 + 1 = 1
-inc(a: Nat): Nat  
-
-  ?i
+Nat.inc (x: Nat): Nat 
+Nat.inc x = (Nat.succ x)
 
 // Decrement
-// 2 - 1 = 1
-// 0 - 1 = 0
-dec(a: Nat): Nat
-  ?d
+Nat.dec (x: Nat): Nat 
+Nat.dec Nat.zero = Nat.zero
+Nat.dec (Nat.succ x) = x
 
-is_zero(a: Nat): Bool
-  ?a
+Bool: Type
+Bool.true : Bool
+Bool.false : Bool 
+
+Bool.is_zero (x: Nat): Bool 
+Bool.is_zero (Nat.zero) = Bool.true 
+Bool.is_zero x = Bool.false 
