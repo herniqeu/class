@@ -1,143 +1,168 @@
-// Exercises:
+// //Verifies if it is an Empty Bit
+//is_empty(a)      -> Bool.false
+//is_empty(b)      -> Bool.false
+//is_empty(c)      -> Bool.false
+//is_empty(d)      -> Bool.false
+//is_empty(Bits.e) -> Bool.true
+Bits.is_empty  (b: Bits) : Bool
+Bits.is_empty  Bits.e = Bool.true
+Bits.is_empty  b      = Bool.false
 
-// Increments an Integer
-// int(false, 1)     = +0
-// int(false, 2)     = -1
-// int(true,  2)     = +3
-Inte.inc (a: Inte): Inte  
-Inte.inc (Inte.pos a) = (Inte.pos(Pos.succ a))
-Inte.inc (Inte.neg (Neg.one)) = (Inte.pos(Pos.zero))
-Inte.inc (Inte.neg (Neg.pred a)) = (Inte.neg(a))
+// //Gets the Tail of a Bits structure
+//tail(a) -> Bits.i(Bits.e)
+//tail(b) -> Bits.i(Bits.i(Bits.e))
+//tail(c) -> Bits.o(Bits.i(Bits.i(Bits.e)))
+//tail(d) -> Bits.i(Bits.i(Bits.i(Bits.e)))
+Bits.tail (b: Bits) : Bits
+Bits.tail Bits.e = Bits.e
+Bits.tail Bits.o b = b
+Bits.tail Bits.i b = b
 
-// Decrements an Integer
-// int(false, 1) = -2
-// int(true,  2) = +1
-// int(true,  0) = -1
-Inte.dec (a: Inte): Inte
-Inte.dec (Inte.pos (Pos.succ a)) = (Inte.pos(a))
-Inte.dec (Inte.pos (Pos.zero)) = (Inte.neg(Neg.one))
-Inte.dec (Inte.neg a) = (Inte.neg(Neg.pred a))
+// //Negates all Bits
+//notb(a) -> Bits.o(Bits.o(Bits.e))
+//notb(b) -> Bits.i(Bits.o(Bits.o(Bits.e)))
+//notb(c) -> Bits.i(Bits.i(Bits.o(Bits.o(Bits.e))))
+//notb(d) -> Bits.o(Bits.o(Bits.o(Bits.o(Bits.e))))
+Bits.notb (b: Bits) : Bits
+Bits.notb Bits.e = Bits.e
+Bits.notb (Bits.o b) = Bits.i (Bits.notb b)
+Bits.notb (Bits.i b) = Bits.o (Bits.notb b)
 
-// Doubles an Integer
-// int(false, 4) = -8
-// int(false, 1) = -2
-// int(true,  2) = +4
-Inte.dbl (a: Inte): Inte 
-Inte.dbl (Inte.pos (Pos.zero)) = (Inte.pos(Pos.zero))
-Inte.dbl (Inte.pos (Pos.succ a)) = (Inte.inc(Inte.inc(Inte.dbl(Inte.pos a))))
-Inte.dbl (Inte.neg (Neg.one)) = (Inte.neg(Neg.pred(Neg.one)))
-Inte.dbl (Inte.neg (Neg.pred a))  = (Inte.dec(Inte.dec(Inte.dbl(Inte.neg a))))
+// //Increments a Bit
+//inc(a) -> Bits.o(Bits.o(Bits.i(Bits.e)))
+//inc(b) -> Bits.i(Bits.i(Bits.i(Bits.e)))
+//inc(c) -> Bits.i(Bits.o(Bits.i(Bits.i(Bits.e))))
+//inc(d) -> Bits.o(Bits.o(Bits.o(Bits.o(Bits.i(Bits.e)))))
+Bits.inc (b: Bits) : Bits
+Bits.inc Bits.e     = Bits.i (Bits.e)
+Bits.inc (Bits.o b) = Bits.i b
+Bits.inc (Bits.i b) = Bits.o (Bits.inc b)
 
-// Adds two Integers
-// int(false, 4) + int(false, 2) = -6
-// int(false, 4) + int(true,  2) = -2
-Inte.add (a: Inte) (b: Inte) : Inte
-Inte.add Inte.pos (Pos.zero) b = b
-Inte.add (Inte.neg (Neg.one)) b = Inte.dec b
-Inte.add (Inte.pos (Pos.succ a)) (Inte.pos  b) = (Inte.inc(Inte.add (Inte.pos a) (Inte.pos b)))
-Inte.add (Inte.pos (Pos.succ a)) (Inte.neg (Neg.pred b)) = (Inte.add (Inte.pos a) (Inte.neg b))
-Inte.add (Inte.neg (Neg.pred a)) (Inte.pos (Pos.succ b)) = (Inte.add (Inte.neg a) (Inte.pos b))
-Inte.add (Inte.neg (Neg.pred a)) (Inte.neg b) = (Inte.dec(Inte.add (Inte.neg a) (Inte.neg b)))
-Inte.add a b = Inte.pos(Pos.zero)
+// //Decrements a Bit
+//dec(a) -> Bits.o(Bits.i(Bits.e))
+//dec(b) -> Bits.i(Bits.o(Bits.i(Bits.e)))
+//dec(c) -> Bits.i(Bits.i(Bits.o(Bits.i(Bits.e))))
+//dec(d) -> Bits.o(Bits.i(Bits.i(Bits.i(Bits.e))))
+Bits.dec (b: Bits) : Bits
+Bits.dec Bits.e              = Bits.e 
+Bits.dec (Bits.o (Bits.e))   = Bits.e
+Bits.dec (Bits.o (Bits.o b)) = (Bits.i (Bits.dec b))
+Bits.dec (Bits.o (Bits.i b)) = (Bits.i (Bits.dec b))
+Bits.dec (Bits.i (Bits.e))   = (Bits.o (Bits.e))
+Bits.dec (Bits.i (Bits.o b)) = Bits.o b
+Bits.dec (Bits.i (Bits.i b)) = Bits.o b
 
-// Multiplies two Integers
-// int(false, 2) * int(true, 3)  = -6
-// int(false, 4) * int(false, 5) = +20
-Inte.mul  (a: Inte) (b: Inte) : Inte
-Inte.mul (Inte.pos (Pos.zero)) b = Inte.pos (Pos.zero)
-Inte.mul a (Inte.pos (Pos.zero)) = Inte.pos (Pos.zero)
-Inte.mul (Inte.neg (Neg.one)) (Inte.neg(Neg.one)) = Inte.pos (Pos.succ(Pos.zero))
-Inte.mul (Inte.neg (Neg.one)) (Inte.neg(Neg.pred b)) = (Inte.inc (Inte.mul (Inte.neg (Neg.one)) (Inte.neg b)))
-Inte.mul (Inte.neg (Neg.pred a)) (Inte.neg b) = (Inte.sub (Inte.mul (Inte.neg a) (Inte.neg b)) (Inte.neg b))
-Inte.mul (Inte.neg (Neg.pred a)) (Inte.neg(Neg.one)) = (Inte.inc (Inte.mul (Inte.neg a) (Inte.neg (Neg.one))))
-Inte.mul (Inte.neg a) (Inte.pos (Pos.succ b)) = (Inte.add (Inte.mul (Inte.neg a) (Inte.pos b)) (Inte.neg a))
-Inte.mul (Inte.pos (Pos.succ a))  (Inte.pos b) = (Inte.add (Inte.mul (Inte.pos a) (Inte.pos b)) (Inte.pos b))
-Inte.mul (Inte.pos (Pos.succ a)) (Inte.neg b) = (Inte.add (Inte.mul (Inte.pos a) (Inte.neg b)) (Inte.neg b))
+// //Concatenate two Bits structures
+//concat(a,b) -> Bits.i(Bits.i(Bits.o(Bits.i(Bits.i(Bits.e)
+//concat(b,c) -> Bits.o(Bits.i(Bits.i(Bits.o(Bits.o(Bits.i(Bits.i(Bits.e)))))))
+//concat(c,d) -> Bits.o(Bits.o(Bits.i(Bits.i(Bits.i(Bits.i(Bits.i(Bits.i(Bits.e))))))))
+Bits.concat (a: Bits) (b: Bits) : Bits
+Bits.concat Bits.e     b = b
+Bits.concat (Bits.o a) b = (Bits.o(Bits.concat a b))
+Bits.concat (Bits.i a) b = (Bits.i(Bits.concat a b))
 
-// Subtracts two Integers
-// int(false, 6) - int(false, 6) = +0
-// int(false, 4) - int(false, 6) = +2
-Inte.sub  (a: Inte) (b: Inte) : Inte  
-Inte.sub  a (Inte.neg (Neg.one)) = (Inte.inc a)
-Inte.sub  a (Inte.pos (Pos.zero)) = a
-Inte.sub (Inte.pos (Pos.zero)) (Inte.neg b) = (Inte.neg b) 
-Inte.sub (Inte.neg (Neg.one)) (Inte.neg (Neg.one)) = Inte.pos(Pos.zero)
-Inte.sub (Inte.neg (Neg.one)) (Inte.pos (Pos.succ b)) = Inte.dec(Inte.sub (Inte.neg (Neg.one)) (Inte.pos b))
-Inte.sub (Inte.pos a) (Inte.neg (Neg.pred b)) = Inte.inc(Inte.sub (Inte.pos a) (Inte.neg b))
-Inte.sub (Inte.neg (Neg.pred a)) (Inte.pos (Pos.succ b)) = Inte.dec(Inte.dec(Inte.sub (Inte.neg a) (Inte.pos b)))
-Inte.sub (Inte.pos (Pos.succ a)) (Inte.neg  b) = Inte.inc(Inte.sub (Inte.pos a) (Inte.neg b))
-Inte.sub (Inte.neg (Neg.one)) (Inte.neg (Neg.pred b)) = Inte.inc(Inte.sub (Inte.neg (Neg.one)) (Inte.neg b))
-Inte.sub (Inte.pos (Pos.zero)) (Inte.pos (Pos.succ b)) = Inte.dec(Inte.sub (Inte.pos (Pos.zero)) (Inte.pos b))
-Inte.sub (Inte.neg (Neg.pred a)) (Inte.neg (Neg.pred b)) = (Inte.sub (Inte.neg a) (Inte.neg b))
-Inte.sub (Inte.pos (Pos.succ a)) (Inte.pos (Pos.succ b)) = (Inte.sub (Inte.pos a) (Inte.pos b))
+// //Adds two Bits structures
+//add(a,b) -> Bits.i(Bits.o(Bits.o(Bits.i(Bits.e))))
+//add(b,c) -> Bits.o(Bits.i(Bits.o(Bits.o(Bits.i(Bits.e)))))
+//add(c,d) -> Bits.i(Bits.i(Bits.o(Bits.i(Bits.i(Bits.e)))))
+Bits.add  (a: Bits) (b: Bits) : Bits 
+Bits.add  Bits.e b = b 
+Bits.add  a Bits.e = a 
+Bits.add  (Bits.o a) (Bits.o b) =  (Bits.o( Bits.add a b))
+Bits.add  (Bits.o a) (Bits.i b) =  (Bits.i( Bits.add a b))
+Bits.add  (Bits.i a) (Bits.o b) =  (Bits.i( Bits.add a b))
+Bits.add  (Bits.i a) (Bits.i b) =  (Bits.o( Bits.add a (Bits.inc b)))
+
+// //Returns Bits.i if only both bits are Bits.i
+//and(a,b) -> Bits.o(Bits.i(Bits.e))
+//and(b,c) -> Bits.o(Bits.o(Bits.i(Bits.e)))
+//and(c,d) -> Bits.o(Bits.o(Bits.i(Bits.i(Bits.e))))
+Bits.and  (a: Bits) (b: Bits) : Bits
+Bits.and  Bits.e b = Bits.e
+Bits.and  a Bits.e = Bits.e
+Bits.and  (Bits.o a) (Bits.o b) = Bits.o(Bits.and a b)
+Bits.and  (Bits.o a) (Bits.i b) = Bits.o(Bits.and a b)
+Bits.and  (Bits.i a) (Bits.o b) = Bits.o(Bits.and a b)
+Bits.and  (Bits.i a) (Bits.i b) = Bits.i(Bits.and a b)
+
+// //Returns Bits.i if any of bits are Bits.i
+//or(a,b) -> Bits.i(Bits.i(Bits.e))
+//or(b,c) -> Bits.o(Bits.i(Bits.i(Bits.i(Bits.e))))
+//or(c,d) -> Bits.i(Bits.i(Bits.i(Bits.i(Bits.e))))
+Bits.or  (a: Bits) (b: Bits) : Bits
+Bits.or  Bits.e b = Bits.e
+Bits.or  a Bits.e = Bits.e
+Bits.or  (Bits.o a) (Bits.o b) = Bits.o(Bits.or a b)
+Bits.or  (Bits.o a) (Bits.i b) = Bits.i(Bits.or a b)
+Bits.or  (Bits.i a) (Bits.o b) = Bits.i(Bits.or a b)
+Bits.or  (Bits.i a) (Bits.i b) = Bits.i(Bits.or a b)
+
+// //Verifies if both Bit structures are equal
+//eql(a,b) -> Bool.false
+//eql(b,c) -> Bool.false
+//eql(d,d) -> Bool.true
+Bits.eql  (a: Bits) (b: Bits) : Bool
+Bits.eql  Bits.e      Bits.e    = Bool.true
+Bits.eql  (Bits.o a) (Bits.o b) = Bits.eql a b
+Bits.eql  (Bits.o a) (Bits.i b) = Bits.eql a b
+Bits.eql  (Bits.i a) (Bits.o b) = Bits.eql a b
+Bits.eql  (Bits.i a) (Bits.i b) = Bits.eql a b
+Bits.eql  a           b         = Bool.false
+
+// //Reverses a Bits structure
+// //reverse(a) -> Bits.i(Bits.i(Bits.e))
+// //reverse(b) -> Bits.i(Bits.i(Bits.o(Bits.e)))
+// //reverse(c) -> Bits.i(Bits.i(Bits.o(Bits.o(Bits.e))))
+// //reverse(d) -> Bits.i(Bits.i(Bits.i(Bits.i(Bits.e))))
+Bits.reverse(b: Bits): Bits
+Bits.reverse b = (Bits.reverse_go b Bits.e)
+
+Bits.reverse_go (b: Bits) (acum: Bits)  : Bits
+Bits.reverse_go Bits.e     acum = acum
+Bits.reverse_go (Bits.o b) acum = Bits.reverse_go b (Bits.o acum)
+Bits.reverse_go (Bits.i b) acum = Bits.reverse_go b (Bits.i acum)
+
+// //Gets the length of the Bits structure
+//length(a) -> Nat.succ(Nat.succ(Nat.zero))
+//length(b) -> Nat.succ(Nat.succ(Nat.succ(Nat.zero)))
+//length(c) -> Nat.succ(Nat.succ(Nat.succ(Nat.succ(Nat.zero))))
+//length(d) -> Nat.succ(Nat.succ(Nat.succ(Nat.succ(Nat.zero))))
+Bits.length (bs: Bits)  : Nat
+Bits.length bs = Bits.length_go  bs Nat.zero
+
+Bits.length_go  (bs: Bits)  (acum: Nat) : Nat
+Bits.length_go Bits.e      acum = acum
+Bits.length_go (Bits.o bs) acum = Bits.length_go bs (Nat.succ acum)
+Bits.length_go (Bits.i bs) acum = Bits.length_go bs (Nat.succ acum)
 
 
-// Equal
-Inte.eql (a: Inte) (b: Inte) : Bool 
-Inte.eql (Inte.pos (Pos.zero)) (Inte.pos (Pos.zero)) = Bool.true
-Inte.eql (Inte.neg (Neg.one)) (Inte.neg (Neg.one)) = Bool.true
-Inte.eql (Inte.pos (Pos.succ a)) (Inte.pos (Pos.succ b)) = (Inte.eql (Inte.pos a) (Inte.pos b))
-Inte.eql (Inte.neg (Neg.pred a)) (Inte.neg (Neg.pred b)) = (Inte.eql (Inte.neg a) (Inte.neg b))
-Inte.eql a b = Bool.false //default
+// //Multiplies two Bits structures
+// 0 x 0 = 0
+// 0 x 1 = 0
+// 1 x 0 = 0
+// 1 x 1 = 1
+//mul(a,b) -> Bits.o(Bits.i(Bits.o(Bits.o(Bits.i(Bits.e)))))
+//mul(b,c) -> Bits.o(Bits.o(Bits.o(Bits.i(Bits.o(Bits.o(Bits.i(Bits.e)))))))
 
 
-// Greater than
-// int(false, 2) > int(false, 5) = True
-// int(false, 5) > int(false, 1) = False
-// int(false, 2) > int(true,  0) = False
-// int(true,  0) > int(false, 2) = True
-Inte.gtn (a: Inte) (b: Inte) : Bool // if A > B then True else false
-Inte.gtn (Inte.pos (Pos.succ a)) (Inte.pos (Pos.zero)) = (Bool.true)
-Inte.gtn (Inte.neg (Neg.one)) (Inte.neg (Neg.pred b)) = (Bool.true)
-Inte.gtn (Inte.pos a) (Inte.neg b) = Bool.true
-Inte.gtn (Inte.pos (Pos.succ a)) (Inte.pos (Pos.succ b)) = (Inte.gtn  (Inte.pos a)  (Inte.pos b))
-Inte.gtn (Inte.neg (Neg.pred a)) (Inte.neg (Neg.pred b)) = Inte.gtn  (Inte.neg a)  (Inte.neg b)
-Inte.gtn  a b = (Bool.false) //default case
+// //Drops a n Number of Bits starting from from the least significative bit
+//drop(1, a) -> Bits.i(Bits.e)
+//drop(1, b) -> Bits.i(Bits.i(Bits.e))
+//drop(1, c) -> Bits.o(Bits.i(Bits.i(Bits.e)))
+//drop(1, d) -> Bits.i(Bits.i(Bits.i(Bits.e)))
+Bits.drop (n: Nat)  (bs: Bits) : Bits
+Bits.drop Nat.zero     bs     = bs
+Bits.drop (Nat.succ n) Bits.e = Bits.e
+Bits.drop (Nat.succ n) (Bits.o bs) = (Bits.drop n bs)
+Bits.drop (Nat.succ n) (Bits.i bs) = (Bits.drop n bs)
 
-// Lower than
-// int(false, 1) < int(true,  0) = True
-// int(true,  0) < int(false, 1) = False
-Inte.ltn (a: Inte) (b: Inte) : Bool 
-Inte.ltn (Inte.pos (Pos.zero)) (Inte.pos (Pos.succ b)) = Bool.true
-Inte.ltn (Inte.neg (Neg.pred a)) (Inte.neg (Neg.one)) = Bool.true
-Inte.ltn (Inte.neg a) (Inte.pos b) = Bool.true
-Inte.ltn (Inte.pos (Pos.succ a)) (Inte.pos (Pos.succ b)) = (Inte.ltn  (Inte.pos a)  (Inte.pos b))
-Inte.ltn (Inte.neg (Neg.pred a)) (Inte.neg (Neg.pred b)) = (Inte.ltn  (Inte.neg a)  (Inte.neg b))
-Inte.ltn a b = Bool.false //default case
-
-//pos0 pos1
-//neg0 neg1
-//neg pos
-//pos pos
-//neg neg
-//default
-
-
-// Minimum
-// min(int(false, 1), int(true,  0)  = -1
-// min(int(false, 1), int(false, 3)) = -3
-Inte.min(a: Inte) (b: Inte): Inte 
-Inte.min a b = (Bool.if (Inte.ltn a b) a b)
-
-// Maximum
-// max(int(false, 1), int(true,  0)) = +0
-// max(int(false, 1), int(false, 3)) = -1
-Inte.max(a: Inte) (b: Inte): Inte 
-Inte.max a b = (Bool.if (Inte.gtn a b) a b)
-
-// Half
-// Divides an Integer by two
-// int(false, 4) = -2
-// int(false, 1) = +0
-// int(true,  6) = +3
-Inte.hlf (a: Inte) : Inte
-Inte.hlf (Inte.neg (Neg.pred (Neg.one))) = Inte.neg (Neg.one)
-Inte.hlf (Inte.neg (Neg.pred (Neg.pred a))) = Inte.dec(Inte.hlf (Inte.neg a))
-Inte.hlf (Inte.pos (Pos.succ (Pos.succ a))) = Inte.inc(Inte.hlf (Inte.pos a))
-Inte.hlf a = Inte.pos (Pos.zero) 
-
-// Division
-// int(true,  2)  / int(true,  2)  = +1
-// int(false, 8)  / int(true,  4)  = -2
-// int(false, 11) / int(false, 5)  = +2
-// int(true,  10) / int(false, 12) = +0
+// //Takes n Bits from the structure, starting from the least significative bit
+//take(1, a) -> Bits.i(Bits.e)
+//take(2, b) -> Bits.o(Bits.i(Bits.e))
+//take(3, c) -> Bits.o(Bits.o(Bits.i(Bits.e)))
+//take(4, d) -> Bits.i(Bits.i(Bits.i(Bits.i(Bits.e))))
+Bits.take (n: Nat)  (bs: Bits)  : Bits
+Bits.take Nat.zero      bs          = Bits.e
+Bits.take (Nat.succ n)  (Bits.o bs) = (Bits.o (Bits.take n bs))
+Bits.take (Nat.succ n)  (Bits.i bs) = (Bits.i (Bits.take n bs))
+Bits.take (Nat.succ n)  Bits.e      = Bits.e
